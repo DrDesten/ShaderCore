@@ -1,3 +1,6 @@
+#ifndef CORE_VERTEX_TRANSFORM
+#define CORE_VERTEX_TRANSFORM
+
 vec3 getNormal() {
     return normalize(gl_NormalMatrix * gl_Normal);
 }
@@ -43,3 +46,5 @@ int getID(vec4 entityAttribute) {
 int getID(int entityId) {
     return entityId - 1000;
 }
+
+#endif

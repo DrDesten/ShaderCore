@@ -1,3 +1,6 @@
+#ifndef CORE_MATH
+#define CORE_MATH
+
 ////////////////////////////////////////////////////////////////////////
 // Constants
 
@@ -897,3 +900,5 @@ float Vec2ToInt16_asfloat(vec2 x) {
     ivec2 ix = ivec2(x * 255.);
     return float( ix.x + (ix.y << 8) ) * (1./65536.);
 }
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef CORE_WATER
+#define CORE_WATER
+
 float waterOffsetSine(vec3 pos, float time) {
     pos.xz *= 0.25;
     pos.xz += time;
@@ -50,3 +53,5 @@ vec3 waterNormalsSine(vec3 pos, float time) {
     vec3 normal    = normalize(cross(tangent, bitangent));
     return normal;
 }
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef CORE_TRANSFORM
+#define CORE_TRANSFORM
+
 uniform vec3 cameraPosition,    previousCameraPosition;
 uniform mat4 gbufferModelView,  gbufferModelViewInverse,  gbufferPreviousModelView;
 uniform mat4 gbufferProjection, gbufferProjectionInverse, gbufferPreviousProjection;
@@ -113,3 +116,5 @@ vec2 motionBlur(vec3 screenPos) {
 	
     return motionVector * (0.25 * MOTION_BLUR_STRENGTH);
 }
+
+#endif

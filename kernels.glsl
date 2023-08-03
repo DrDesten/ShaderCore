@@ -1,4 +1,5 @@
-
+#ifndef CORE_KERNELS
+#define CORE_KERNELS
 
 //////////////////////////////////////////////////////
 //              BLUR KERNELS
@@ -511,3 +512,5 @@ const vec2 TAAOffsets[9] = vec2[]( // Samples 9 points around each pixel, with u
     vec2( -.25, 0.25),
     vec2( -.25, -.25)
 ); */
+
+#endif

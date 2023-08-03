@@ -1,3 +1,6 @@
+#ifndef CORE_GBUFFERS_BASICS
+#define CORE_GBUFFERS_BASICS
+
 uniform sampler2D texture;  // Color
 uniform sampler2D lightmap; // lightmap
 
@@ -32,3 +35,5 @@ float codeID(int blockId) {
 float DynamicLight(vec2 lmcoord) {
     return lmcoord.x * lmcoord.x * TORCHLIGHT_EXTRA_BRIGHTNESS;
 }
+
+#endif
