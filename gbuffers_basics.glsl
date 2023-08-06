@@ -1,4 +1,4 @@
-#ifndef CORE_GBUFFERS_BASICS
+#if !defined CORE_GBUFFERS_BASICS
 #define CORE_GBUFFERS_BASICS
 
 uniform sampler2D texture;  // Color

@@ -1,5 +1,29 @@
-#ifndef CORE_WATER
+#if !defined CORE_WATER
 #define CORE_WATER
+
+float rotatedSine(vec2 pos, float angle) {
+    vec2  dir = vec2(cos(angle), sin(angle));
+    float len = dot(pos, dir);
+    return sin(len);
+}
+vec3 rotatedSineNormals(vec2 pos, float offset, float angle, float strength) {
+    vec2  dir = vec2(cos(angle), sin(angle));
+    float len = dot(pos, dir) + offset;
+
+    float derivative = cos(len);
+    dir             *= derivative * strength;
+    vec3  normals    = normalize(vec3(dir, 1));
+    return normals;
+}
+vec3 rotatedWaveNormals(vec2 pos, float offset, float angle, float strength) {
+    vec2  dir = vec2(cos(angle), sin(angle));
+    float len = dot(pos, dir) + offset;
+
+    float derivative = cos(len) * exp(sin(len));
+    dir             *= derivative * strength;
+    vec3  normals    = normalize(vec3(-dir, 1));
+    return normals;
+}
 
 float waterOffsetSine(vec3 pos, float time) {
     pos.xz *= 0.25;
@@ -32,26 +56,22 @@ float waterVertexOffset(vec3 pos, float time) {
 }
 
 vec3 waterNormalsSine(vec3 pos, float time) {
-    pos.xz *= 2;
-    time    = mod(time * 0.25, 1000) - 500;
+    time    = mod(time, 1000) - 500;
 
-    vec2       derivative = vec2(0);
-    const mat2 rot        = MAT2_ROT(.9, 1.5);
-    vec2       shift      = vec2(1,0);
-    float      amplitude  = 1;
+    float angle     = .1;
+    float offset    = 0;
+    float amplitude = 1;
+    vec3  normal    = vec3(0);
 
-    for (int i = 0; i < 4; i++) {
-        amplitude *= 0.5;
-        pos.xz     = rot * pos.xz + shift * time;
-
-        derivative.x +=  cos(dot(pos.xz, vec2(0.8, 0.2))) * amplitude;
-        derivative.y += -sin(dot(pos.xz, vec2(0.3, 0.7))) * amplitude;
+    for (int i = 0; i < 3; i++) {
+        angle     += .6;
+        offset    += 1;
+        amplitude *= 0.75;
+        pos       *= 1.5;
+        normal    += rotatedWaveNormals(pos.xz, offset + time / (offset * 4), angle, .1) * amplitude;
     }
-
-    vec3 tangent   = vec3(1, 0, derivative.x);
-    vec3 bitangent = vec3(0, 1, derivative.y);
-    vec3 normal    = normalize(cross(tangent, bitangent));
-    return normal;
+    
+    return normalize(normal);
 }
 
 #endif

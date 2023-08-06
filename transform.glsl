@@ -1,4 +1,4 @@
-#ifndef CORE_TRANSFORM
+#if !defined CORE_TRANSFORM
 #define CORE_TRANSFORM
 
 uniform vec3 cameraPosition,    previousCameraPosition;

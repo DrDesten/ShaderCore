@@ -1,4 +1,4 @@
-#ifndef CORE_KERNELS
+#if !defined CORE_KERNELS
 #define CORE_KERNELS
 
 //////////////////////////////////////////////////////

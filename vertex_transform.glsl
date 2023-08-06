@@ -1,4 +1,4 @@
-#ifndef CORE_VERTEX_TRANSFORM_SIMPLE
+#if !defined CORE_VERTEX_TRANSFORM_SIMPLE
 #define CORE_VERTEX_TRANSFORM_SIMPLE
 
 uniform vec3 cameraPosition;
