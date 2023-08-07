@@ -6,7 +6,7 @@ uniform mat4 gbufferModelView;
 uniform mat4 gbufferModelViewInverse;
 uniform mat4 gbufferProjectionInverse;
 
-#include "/core/vertex_transform_simple.glsl"
+#include "vertex_transform_simple.glsl"
 
 vec3 toPlayer(vec3 viewPos) {
     return mat3(gbufferModelViewInverse) * viewPos + gbufferModelViewInverse[3].xyz;

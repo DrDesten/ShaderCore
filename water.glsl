@@ -55,23 +55,42 @@ float waterVertexOffset(vec3 pos, float time) {
     return offset;
 }
 
-vec3 waterNormalsSine(vec3 pos, float time) {
-    time    = mod(time, 1000) - 500;
+vec3 waterNormalsSine(vec3 pos, float time, float strength) {
+    time = mod(time, 1000) - 500;
 
-    float angle     = .1;
-    float offset    = 0;
-    float amplitude = 1;
-    vec3  normal    = vec3(0);
-
-    for (int i = 0; i < 3; i++) {
-        angle     += .6;
-        offset    += 1;
-        amplitude *= 0.75;
-        pos       *= 1.5;
-        normal    += rotatedWaveNormals(pos.xz, offset + time / (offset * 4), angle, .1) * amplitude;
-    }
+    float angleNoise  = noise(pos.xz * .03);
+    float angleNoise2 = noise(pos.xz * .03 - 100);
+    float angles[5] = float[5](
+        time *  0.03,
+        time * -0.05 + angleNoise,
+        time *  0.02 - angleNoise,
+        time * -0.04 + angleNoise2,
+        time *  0.08 - angleNoise2
+    );
     
+    vec3  normal = vec3(0);
+    float amp    = strength;
+    for (int i = 0; i < 5; i++) {
+        pos.xz *= 1.5;
+        amp    *= 0.5;
+
+        float offset = time * (0.5 + i * .5) + noise(pos.xz * .075) * 8;
+        normal      += rotatedWaveNormals(pos.xz, offset, angles[i], amp);
+    }
+
     return normalize(normal);
+}
+
+
+vec3 noiseNormals(vec2 coord, float strength) {
+    vec2  e = vec2(0.01, 0);
+    float C = fbm(coord,        2);
+    float R = fbm(coord + e.xy, 2);
+    float B = fbm(coord + e.yx, 2);
+
+    vec3 n  = vec3(R-C, B-C, e.x);
+    n.xy   *= strength;
+    return normalize(n);
 }
 
 #endif
