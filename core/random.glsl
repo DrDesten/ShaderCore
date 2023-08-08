@@ -1,11 +1,6 @@
 #if !defined CORE_RANDOM
 #define CORE_RANDOM
 
-vec2 R2(float n) {
-    const vec2 a = vec2(1.0/PHI2, 1.0/(PHI2*PHI2));
-    return fract(a * n + 0.5);
-}
-
 float rand(float x) {
     return fract(sin(x * 12.9898) * 4375.5453123);
 }

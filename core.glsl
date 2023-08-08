@@ -1,3 +1,6 @@
 #include "core/constants.glsl"
+#include "core/random.glsl"
+#include "core/dither.glsl"
+#include "core/matrix.glsl"
 #include "core/tonemap.glsl"
 #include "core/packing.glsl"

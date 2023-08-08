@@ -10,54 +10,76 @@ const float INT16_SCALE_INV = 1 / INT16_SCALE;
 const float INT24_SCALE     = 16777215;
 const float INT24_SCALE_INV = 1 / INT24_SCALE;
 
+// i24 -> vec3
+// .x = ObABCDEF
+//    & 0b0000EF
+// .y = 0bABCDEF
+//   >> 0b00ABCD
+//    & 0b0000CD
+// .z = 0bABCDEF
+//   >> 0b0000AB
+//    & 0b0000AB
 vec3 i24ToVec3_f(float x) {
     int ix = int(x * INT24_SCALE);
     return vec3(
-        ix & 255,          // Bitwise AND. Masks the first 8 bits (255 -> 11111111 in binary, AND operation zeros out all other bits)
-        (ix >> 8)  & 255,  // Bitshift down by 8. Moves the first 8 bits out. Afterwards, selecting the first 8 bits again (this isolates bit 9-16)
-        (ix >> 16) & 255   // Same principle
+        ix       & 255,
+        ix >> 8  & 255,
+        ix >> 16 & 255
     ) * INT8_SCALE_INV;
 }
 vec3 i24ToVec3(int x) {
     return vec3(
-        x & 255,          // Bitwise AND. Masks the first 8 bits (255 -> 11111111 in binary, AND operation zeros out all other bits)
-        (x >> 8)  & 255,  // Bitshift down by 8. Moves the first 8 bits out. Afterwards, selecting the first 8 bits again (this isolates bit 9-16)
-        (x >> 16) & 255   // Same principle
+        ix       & 255,
+        ix >> 8  & 255,
+        ix >> 16 & 255
     ) * INT8_SCALE_INV;
 }
 
+// vec3 -> i24
+// i = 0b000000
+//   = 0b0000EF ( .x: 0b0000EF )
+//   | 0b00CDEF ( .y: 0b0000CD, .y << 8:  0b00CD00 )
+//   | 0bABCDEF ( .z: 0b0000AB, .z << 16: 0bAB0000 )
+int vec3ToI24(vec3 x) {
+    ivec3 ix = ivec3(x * INT8_SCALE);
+    return ix.x | ix.y << 8 | ix.z << 16;
+}
+float vec3ToI24_f(vec3 x) {
+    ivec3 ix = ivec3(x * INT8_SCALE);
+    return float( ix.x | ix.y << 8 | ix.z << 16 ) * INT24_SCALE_INV;
+}
+
+// i16 -> vec2
+// .x = ObABCD
+//    & 0b00CD
+// .y = 0bABCD
+//   >> 0b00AB
+//    & 0b00AB
 vec2 i16ToVec2_f(float x) {
     int ix = int(x * INT16_SCALE);
     return vec2(
-        ix & 255,        // Bitwise AND. Masks the first 8 bits (255 -> 11111111 in binary, AND operation zeros out all other bits)
-        (ix >> 8) & 255  // Bitshift down by 8. Moves the first 8 bits out. Afterwards, selecting the first 8 bits again (this isolates bit 9-16)
+        ix      & 255,
+        ix >> 8 & 255
     ) * INT8_SCALE_INV;
 }
 vec2 i16ToVec2(int x) {
     return vec2(
-        x & 255,         // Bitwise AND. Masks the first 8 bits (255 -> 11111111 in binary, AND operation zeros out all other bits)
-        (x >> 8) & 255   // Bitshift down by 8. Moves the first 8 bits out. Afterwards, selecting the first 8 bits again (this isolates bit 9-16)
+        ix      & 255,
+        ix >> 8 & 255
     ) * INT8_SCALE_INV;
 }
 
-
-
-int vec3ToI24(vec3 x) {
-    ivec3 ix = ivec3(x * INT8_SCALE);
-    return ix.x + (ix.y << 8) + (ix.z << 16);
-}
-float vec3ToI24_f(vec3 x) {
-    ivec3 ix = ivec3(x * INT8_SCALE);
-    return float( ix.x + (ix.y << 8) + (ix.z << 16) ) * INT24_SCALE_INV;
-}
-
+// vec2 -> i16
+// i = 0b0000
+//   = 0b00CD ( .x: 0b00CD )
+//   | 0bABCD ( .y: 0b00AB, .y << 8: 0bAB00 )
 int vec2ToI16(vec2 x) {
     ivec2 ix = ivec2(x * INT8_SCALE);
-    return ix.x + (ix.y << 8);
+    return ix.x | ix.y << 8;
 }
 float vec2ToI16_f(vec2 x) {
     ivec2 ix = ivec2(x * INT8_SCALE);
-    return float( ix.x + (ix.y << 8) ) * INT16_SCALE;
+    return float( ix.x | ix.y << 8 ) * INT16_SCALE_INV;
 }
 
 #endif
