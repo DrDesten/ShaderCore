@@ -38,48 +38,49 @@ vec3 transformMAD(in vec3 position, in mat4 transformationMatrix) {
 // Other Matrix Functions
 
 #define MAT2_ROT(angle, scale) \
-    mat2(cos(angle), sin(angle), -sin(angle), cos(angle)) * scale
-    
-#define VEC2_ROT(angle, length) \
-    vec2(cos(angle), sin(angle))
+    (mat2(cos(angle), sin(angle), -sin(angle), cos(angle)) * scale)
 
-mat3 rotationMatrix3DX(float angle) { // You can use mat2 instead, but flip angle and keep X. > vec3(x, mat2 * yz)
-    float s = sin(angle);
-    float c = cos(angle);
-    return mat3(1, 0, 0,
-                0, c,-s,
-                0, s, c
-           );
-}
-mat3 rotationMatrix3DZ(float angle) { // You can use mat2 instead, but flip angle and keep Z. > vec3(mat2 * xy, z)
-    float s = sin(angle);
-    float c = cos(angle);    
-    return mat3(c, -s, 0,
-                s,  c, 0,
-                0,  0, 1
-           );
-}
-
-
-mat3 rotationMatrix3D(vec3 axis, float angle) {
-    float s = sin(angle);
-    float c = cos(angle);
-    float oc = 1.0 - c;
-    
-    return mat3(oc * axis.x * axis.x + c,           oc * axis.x * axis.y - axis.z * s,  oc * axis.z * axis.x + axis.y * s,
-                oc * axis.x * axis.y + axis.z * s,  oc * axis.y * axis.y + c,           oc * axis.y * axis.z - axis.x * s,
-                oc * axis.z * axis.x - axis.y * s,  oc * axis.y * axis.z + axis.x * s,  oc * axis.z * axis.z + c
-           );
-}
-
-mat2 rotationMatrix2D(float angle) {
+mat2 mat2Rot(float angle) {
     float ca = cos(angle);
     float sa = sin(angle);
     return mat2(ca, sa, -sa, ca);
 }
 
-vec2 angleToVector(float angle) {
+#define VEC2_ROT(angle, length) \
+    vec2(cos(angle), sin(angle))
+
+vec2 vec2Rot(float angle) {
     return vec2(cos(angle), sin(angle));
+}
+
+mat3 rotationMatrix3DX(float angle) { // You can use mat2 instead, but flip angle and keep X. > vec3(x, mat2 * yz)
+    float s = sin(angle);
+    float c = cos(angle);
+    return mat3(
+        1, 0, 0,
+        0, c,-s,
+        0, s, c
+    );
+}
+mat3 rotationMatrix3DZ(float angle) { // You can use mat2 instead, but flip angle and keep Z. > vec3(mat2 * xy, z)
+    float s = sin(angle);
+    float c = cos(angle);    
+    return mat3(
+        c, -s, 0,
+        s,  c, 0,
+        0,  0, 1
+    );
+}
+
+mat3 rotationMatrix3D(vec3 axis, float angle) {
+    float s  = sin(angle);
+    float c  = cos(angle);
+    float oc = 1.0 - c;
+    return mat3(
+        oc * axis.x * axis.x + c,          oc * axis.x * axis.y - axis.z * s, oc * axis.z * axis.x + axis.y * s,
+        oc * axis.x * axis.y + axis.z * s, oc * axis.y * axis.y + c,          oc * axis.y * axis.z - axis.x * s,
+        oc * axis.z * axis.x - axis.y * s, oc * axis.y * axis.z + axis.x * s, oc * axis.z * axis.z + c
+    );
 }
 
 vec3 arbitraryTangent(vec3 normal) {
