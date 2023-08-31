@@ -29,9 +29,9 @@ vec3 i24ToVec3_f(float x) {
 }
 vec3 i24ToVec3(int x) {
     return vec3(
-        ix       & 255,
-        ix >> 8  & 255,
-        ix >> 16 & 255
+        x       & 255,
+        x >> 8  & 255,
+        x >> 16 & 255
     ) * INT8_SCALE_INV;
 }
 
@@ -64,8 +64,8 @@ vec2 i16ToVec2_f(float x) {
 }
 vec2 i16ToVec2(int x) {
     return vec2(
-        ix      & 255,
-        ix >> 8 & 255
+        x      & 255,
+        x >> 8 & 255
     ) * INT8_SCALE_INV;
 }
 

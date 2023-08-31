@@ -1,6 +1,8 @@
 #if !defined CORE_TONEMAP
 #define CORE_TONEMAP
 
+#include "color.glsl"
+
 vec3 tm_reinhard(vec3 color, float a) {
     return color / (a + color);
 }

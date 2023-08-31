@@ -1,6 +1,8 @@
 #if !defined CORE_DITHER
 #define CORE_DITHER
 
+#include "constants.glsl"
+
 vec2 R2(float n) {
     const vec2 a = vec2(1.0/PHI2, 1.0/(PHI2*PHI2));
     return fract(a * n + 0.5);
