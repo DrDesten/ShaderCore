@@ -38,16 +38,15 @@ vec3 transformMAD(in vec3 position, in mat4 transformationMatrix) {
 // Other Matrix Functions
 
 #define MAT2_ROT(angle, scale) \
-    (mat2(cos(angle), sin(angle), -sin(angle), cos(angle)) * scale)
+    (mat2(cos(angle), sin(angle), -sin(angle), cos(angle)) * scale);
 
 mat2 mat2Rot(float angle) {
-    float ca = cos(angle);
-    float sa = sin(angle);
+    float ca = cos(angle), sa = sin(angle);
     return mat2(ca, sa, -sa, ca);
 }
 
 #define VEC2_ROT(angle, length) \
-    vec2(cos(angle), sin(angle))
+    vec2(cos(angle), sin(angle));
 
 vec2 vec2Rot(float angle) {
     return vec2(cos(angle), sin(angle));
