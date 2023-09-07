@@ -1,17 +1,6 @@
 #if !defined CORE_COLOR
 #define CORE_COLOR
 
-/* vec3 saturation(vec3 col, float saturation) {
-    float brightness = dot(col, vec3(0.299, 0.587, 0.112));
-    return mix(vec3(brightness), col, saturation);
-}
-
-vec3 contrast(vec3 col, float contrast) {
-    vec3 lower = (contrast * col) * (col * col);
-    vec3 upper = 1 - contrast * sq(col - 1);
-    return mix(lower, upper, col);
-} */
-
 float luminance(vec3 color) {
     return dot(color, vec3(0.2126, 0.7152, 0.0722));
 }
@@ -31,15 +20,14 @@ vec3 applyBrightness(vec3 color, float brightness, float colorOffset) { // Range
 vec3 applyContrast(vec3 color, float contrast) { // Range: 0-inf
 	color = color * 0.99 + 0.005;
 	vec3 colorHigh = vec3(1) - 0.5 * pow(-2 * color + 2, vec3(contrast));
-	vec3 colorLow  =     vec3(0.5) * pow( 2 * color,     vec3(contrast));
+	vec3 colorLow  = vec3(0.5)     * pow( 2 * color,     vec3(contrast));
 	return saturate(mix(colorLow, colorHigh, color));
 }
 vec3 applySaturation(vec3 color, float saturation) { // Range: 0-2
     return saturate(mix(vec3(luminance(color)), color, saturation));
 }
 vec3 applyVibrance(vec3 color, float vibrance) { // -1 to 1
-	float luminance  = luminance(color);
-	float saturation = distance(vec3(luminance), color);
+	float saturation = saturation(color);
 	return applySaturation(color, (1 - saturation) * vibrance + 1);
 }
 
