@@ -4,16 +4,31 @@
 // HLSL Saturate
 
 float saturate(float a) {
-    return clamp(a, 0.0, 1.0);
+    return clamp(a, 0., 1.);
 }
 vec2 saturate(vec2 a) {
-    return clamp(a, 0.0, 1.0);
+    return clamp(a, 0., 1.);
 }
 vec3 saturate(vec3 a) {
-    return clamp(a, 0.0, 1.0);
+    return clamp(a, 0., 1.);
 }
 vec4 saturate(vec4 a) {
-    return clamp(a, 0.0, 1.0);
+    return clamp(a, 0., 1.);
+}
+
+// Epsilon Compare
+
+bool closeTo(float a, float b, float epsilon) {
+    return abs(a-b) < epsilon;
+}
+
+// Branchless step()
+
+float fstep(float edge, float x) {
+    return saturate((x - edge) * 1e36);
+}
+float fstep(float edge, float x, float slope) {
+    return saturate((x - edge) * slope);
 }
 
 // Maximum Component
@@ -157,7 +172,7 @@ vec4 cb(vec4 x) {
     return x * x * x;
 }
 
-// Squared Square
+// Squared Square (4th Power)
 
 float sqsq(float x) {
     return sq(sq(x));
@@ -192,17 +207,39 @@ vec3 sqrtf01(vec3 x) {
 vec4 sqrtf01(vec4 x) {
     return x * (2.0 - x);
 }
-float sqrtf13(float x) {
-    return x * ( -0.23606797749978969641 * x + 1.23606797749978969641 );
+
+// Quadratic functions where f(0.5) = 1 and f(0) = f(1) = 0 
+
+float peak05(float x) { 
+    return x * (-4*x + 4); 
 }
-vec2 sqrtf13(vec2 x) {
-    return x * ( -0.23606797749978969641 * x + 1.23606797749978969641 );
+vec2  peak05(vec2 x) { 
+    return x * (-4*x + 4); 
 }
-vec3 sqrtf13(vec3 x) {
-    return x * ( -0.23606797749978969641 * x + 1.23606797749978969641 );
+vec3 peak05(vec3 x) { 
+    return x * (-4*x + 4); 
 }
-vec4 sqrtf13(vec4 x) {
-    return x * ( -0.23606797749978969641 * x + 1.23606797749978969641 );
+vec4 peak05(vec4 x) { 
+    return x * (-4*x + 4); 
+}
+
+// Smoothstep functions with smooth 2nd derivative 
+
+float smootherstep(float x) {
+    return saturate( cb(x) * (x * (6. * x - 15.) + 10.) );
+}
+float smootherstep(float edge0, float edge1, float x) {
+    x = saturate((x - edge0) * (1. / (edge1 - edge0)));
+    return cb(x) * (x * (6. * x - 15.) + 10.);
+}
+
+// Map Range
+
+float map(float value, float from_min, float from_max, float to_min, float to_max) {
+  return to_min + (value - from_min) * (to_max - to_min) / (from_max - min1);
+}
+float mapclamp(float value, float from_min, float from_max, float to_min, float to_max) {
+    return clamp(map(from_min, from_max, to_min, to_max, value), to_min, to_max);
 }
 
 #endif

@@ -11,16 +11,6 @@
 ////////////////////////////////////////////////////////////////////////
 // General Functions
 
-bool closeTo(float a, float b, float epsilon) {
-    return abs(a-b) < epsilon;
-}
-
-float fstep(float edge, float x) { // Fast step() function with no branching
-    return clamp((x - edge) * 1e36, 0, 1);
-}
-float fstep(float edge, float x, float slope) { // Fast step() function with no branching
-    return clamp((x - edge) * slope, 0, 1);
-}
 
 #include "core/utils.glsl"
 
@@ -37,15 +27,6 @@ float acosf(float x) {
     return HALF_PI - asinf(x);
 }
 
-float smootherstep(float x) { // Second derivative zero as well
-    return saturate( cb(x) * (x * (6. * x - 15.) + 10.) );
-}
-float smootherstep(float edge0, float edge1, float x) {
-    x = saturate((x - edge0) * (1. / (edge1 - edge0)));
-    return cb(x) * (x * (6. * x - 15.) + 10.);
-}
-
-
 float tri(float x) {
     return abs(fract(x) * 2 - 1);
 }
@@ -54,6 +35,7 @@ float tri(float x) {
 #include "core/random.glsl"
 
 #include "core/matrix.glsl"
+#include "core/transform.glsl"
 
 ////////////////////////////////////////////////////////////////////////
 // Color-Specific functions
@@ -127,10 +109,6 @@ vec4 textureSmoothstep(sampler2D sampler, vec2 coord, vec2 samplerSize, vec2 sam
 /////////////////////////////////////////////////////////////////////////////////
 //                              OTHER FUNCTIONS
 
-float peak05(float x) { return x * (-4*x + 4); }
-vec2  peak05(vec2 x)  { return x * (-4*x + 4); }
-vec3  peak05(vec3 x)  { return x * (-4*x + 4); }
-vec4  peak05(vec4 x)  { return x * (-4*x + 4); }
 
 float lineDist2P(vec2 coord, vec2 start, vec2 end) {
     vec2 pa = coord - start;
@@ -159,32 +137,8 @@ float line1P1V(vec2 coord, vec2 start, vec2 dir, float thickness, float slope) {
     return saturate((thickness - lineDist1P1V(coord, start, dir)) * slope + 1);
 }
 
-float map(float value, float min1, float max1, float min2, float max2) {
-  return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
-}
-float mapclamp(float value, float from_min, float from_max, float to_min, float to_max) {
-    return clamp(map(from_min, from_max, to_min, to_max, value), to_min, to_max);
-}
-
 vec2 convertPolarCartesian(vec2 coord) {
     return vec2(coord.x * cos(coord.y), coord.x * sin(coord.y));
-}
-
-float linearizeDepth(float d,float nearPlane,float farPlane) { // Linearizes the depth to viewspace z
-    d = 2.0 * d - 1.0; // Convert to NDC (normalized device coordinates)
-    return 2.0 * nearPlane * farPlane / (farPlane + nearPlane - d * (farPlane - nearPlane));
-}
-float linearizeDepthInverse(float l, float nearPlane, float farPlane) { // Un-Linearizes viewspace z to screenspace depth
-    return (farPlane * (l-nearPlane))/(l * (farPlane-nearPlane));
-}
-float linearizeDepthf(float d, float slope) { // For matching results, slope should be set to 1/nearPlane
-    return 1 / ((-d * slope) + slope);
-}
-float linearizeDepthfDivisor(float d, float slope) { // Returns 1 / linearizeDepthf For matching results, slope should be set to 1/nearPlane
-    return (-d * slope) + slope;
-}
-float linearizeDepthfInverse(float ld, float slope) { // For matching results, slope should be set to 1/nearPlane
-    return 1 / (-ld * slope) + 1;
 }
 
 float schlickFresnel(vec3 viewRay, vec3 normal, float refractiveIndex, float baseReflectiveness) {
@@ -275,31 +229,6 @@ float angle(vec2 v) {
     float ang = HALF_PI - atan(v.x / v.y);
     if(v.y < 0) {ang = ang + PI;}
     return ang;
-}
-
-
-////////////////////////////////////////////////////////////////////////
-// (Un)Packing Functions
-
-vec2 signNotZero(vec2 v) {
-    return vec2((v.x >= 0.0) ? +1.0 : -1.0, (v.y >= 0.0) ? +1.0 : -1.0);
-}
-
-vec2 octahedralEncode(in vec3 v) {
-    float l1norm = abs(v.x) + abs(v.y) + abs(v.z);
-    vec2  result = v.xy * (1.0 / l1norm);
-    if (v.z < 0.0) {
-        result = (1.0 - abs(result.yx)) * signNotZero(result.xy);
-    }
-    return result;
-}
-
-vec3 octahedralDecode(vec2 o) {
-    vec3 v = vec3(o.x, o.y, 1.0 - abs(o.x) - abs(o.y));
-    if (v.z < 0.0) {
-        v.xy = (1.0 - abs(v.yx)) * signNotZero(v.xy);
-    }
-    return normalize(v);
 }
 
 #include "core/packing.glsl"

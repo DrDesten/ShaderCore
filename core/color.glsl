@@ -1,6 +1,8 @@
 #if !defined CORE_COLOR
 #define CORE_COLOR
 
+#include "utils.glsl"
+
 float luminance(vec3 color) {
     return dot(color, vec3(0.2126, 0.7152, 0.0722));
 }
@@ -13,7 +15,7 @@ float saturation(vec3 color) {
 
 
 vec3 applyBrightness(vec3 color, float brightness, float colorOffset) { // Range: inf-0
-	float tmp = (1 / (2 * colorOffset + 1));
+	float tmp = 1 / (2 * colorOffset + 1);
 	color = color * tmp + (colorOffset * tmp);
 	return pow(color, vec3(brightness));
 }
@@ -43,21 +45,18 @@ vec3 rgb2hsv(vec3 c) {
 vec3 hsv2rgb(vec3 c) {
     const vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
     vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+    return c.z * mix(K.xxx, saturate(p - K.xxx), c.y);
 }
 
 vec3 gamma(vec3 color) {
-    color = pow(color, vec3(GAMMA));
-    return color;
+    return pow(color, vec3(GAMMA));
 }
 vec3 gamma_inv(vec3 color) {
-    color = pow(color, vec3(1 / GAMMA));
-    return color;
+    return pow(color, vec3(1 / GAMMA));
 }
 
 vec3 normalizeColor(vec3 col) {
-    col += 1e-5; // prevent NaNs
-    return col / max(col.r, max(col.g, col.b));
+    return min( col / maxc(col), 1. );
 }
 
 #endif

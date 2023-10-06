@@ -8,6 +8,7 @@
 #include "core/packing.glsl"
 #include "core/random.glsl"
 #include "core/tonemap.glsl"
+#include "core/transform.glsl"
 #include "core/utils.glsl"
 
 #endif
