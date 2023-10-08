@@ -59,4 +59,22 @@ vec3 normalizeColor(vec3 col) {
     return min( col / maxc(col), 1. );
 }
 
+// Algorithm from "https://tannerhelland.com/2012/09/18/convert-temperature-rgb-algorithm-code.html"
+vec3 blackbody(float temperature) {
+    temperature /= 100;
+    if (temperature < 66) {
+        return vec3(
+            1,
+            saturate(0.3900815787690196 * log(temperature) - 0.6318414437886275),
+            saturate(0.543206789110196 * log(temperature - 10) - 1.19625408914) // Ternary not necessary since clamp() sets NaNs to zero already
+        );
+    } else {
+        return vec3(
+            saturate(1.292936186062745 * pow(temperature - 60, -0.1332047592)),
+            saturate(1.129890860895294 * pow(temperature - 60, -0.0755148492)),
+            1
+        );
+    }
+}
+
 #endif

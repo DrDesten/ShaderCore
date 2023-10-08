@@ -236,7 +236,7 @@ float smootherstep(float edge0, float edge1, float x) {
 // Map Range
 
 float map(float value, float from_min, float from_max, float to_min, float to_max) {
-  return to_min + (value - from_min) * (to_max - to_min) / (from_max - min1);
+  return to_min + (value - from_min) * (to_max - to_min) / (from_max - from_min);
 }
 float mapclamp(float value, float from_min, float from_max, float to_min, float to_max) {
     return clamp(map(from_min, from_max, to_min, to_max, value), to_min, to_max);

@@ -45,6 +45,16 @@ float noise(float x) {
 	return smoothstep(a, b, f);
 }
 
+vec2 noise2(float x) {
+    float i = floor(x);
+    float f = fract(x);
+
+	// Two connecting points
+	vec2 a = rand2(i);
+    vec2 b = rand2(i + 1.0);
+
+	return smoothstep(a, b, vec2(f));
+}
 vec2 noise2(vec2 x) {
     vec2 i = floor(x);
     vec2 f = fract(x);
@@ -57,16 +67,6 @@ vec2 noise2(vec2 x) {
 
     vec2 u = f * f * (3.0 - 2.0 * f);
 	return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-}
-vec2 noise2(float x) {
-    float i = floor(x);
-    float f = fract(x);
-
-	// Two connecting points
-	vec2 a = rand2(i);
-    vec2 b = rand2(i + 1.0);
-
-	return smoothstep(a, b, f);
 }
 
 // Fractal Noise
