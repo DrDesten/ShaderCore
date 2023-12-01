@@ -1,6 +1,9 @@
 #if !defined CORE_VERTEX_TRANSFORM
 #define CORE_VERTEX_TRANSFORM
 
+// In Geometry Shaders, gl_* vertex attributes are not available
+#ifndef GEO
+
 vec3 getNormal() {
     return normalize(gl_NormalMatrix * gl_Normal);
 }
@@ -33,6 +36,9 @@ vec3 getView() {
 vec4 getView4() {
     return gl_ModelViewMatrix * gl_Vertex;
 }
+
+#endif
+
 vec3 viewToClip(vec3 viewPos) {
     return mat3(gl_ProjectionMatrix) * viewPos + gl_ProjectionMatrix[3].xyz;
 }

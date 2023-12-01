@@ -1,6 +1,12 @@
 #if !defined CORE_UTILS
 #define CORE_UTILS
 
+/* #define DECLR_MULTIDIM(DECLR_MACRO) \
+    DECLR_MACRO(float)              \;
+    DECLR_MACRO(vec2)               \;
+    DECLR_MACRO(vec3)               \;
+    DECLR_MACRO(vec4)               \; */
+
 // HLSL Saturate
 
 float saturate(float a) {
@@ -191,6 +197,21 @@ vec4 sqsq(vec4 x) {
 
 float logn(float base, float x) {
     return log2(x) / log2(base);
+}
+
+// Sigmoid
+
+float sigmoid(float x) {
+    return 1 / (1 + exp(-x));
+}
+vec2 sigmoid(vec2 x) {
+    return 1 / (1 + exp(-x));
+}
+vec3 sigmoid(vec3 x) {
+    return 1 / (1 + exp(-x));
+}
+vec4 sigmoid(vec4 x) {
+    return 1 / (1 + exp(-x));
 }
 
 // Square Root Approximations
