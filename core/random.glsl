@@ -103,6 +103,23 @@ float fbm(vec2 x, int n, float scale, float falloff) {
 	return v;
 }
 
+float stretched_fbm(vec2 x, int n, float scale, float falloff, float stretch) {
+	float v = .0;
+	float a = .5;
+	vec2 shift = vec2(100);
+
+	// Rotate to reduce axial bias
+    const mat2 rot = mat2(cos(.5), sin(.5), -sin(.5), cos(.5));
+
+	for (int i = 0; i < n; ++i) {
+		v += a * noise(x * vec2(1, stretch));
+		x  = rot * x * scale + shift;
+		a *= falloff;
+	}
+	return v;
+}
+
+
 float voronoiSmooth(vec2 coord, float size, int complexity, float time) {
     vec2 uv  = coord;
     
