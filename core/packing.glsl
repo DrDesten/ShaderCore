@@ -1,6 +1,34 @@
 #if !defined CORE_PACKING
 #define CORE_PACKING
 
+// Normal Packing
+
+vec2 signNotZero(vec2 v) {
+    return vec2(
+        v.x >= 0. ? 1. : -1., 
+        v.y >= 0. ? 1. : -1.
+    );
+}
+
+vec2 octahedralEncode(in vec3 v) {
+    float l1norm = abs(v.x) + abs(v.y) + abs(v.z);
+    vec2  result = v.xy * (1.0 / l1norm);
+    if (v.z < 0.0) {
+        result = (1.0 - abs(result.yx)) * signNotZero(result.xy);
+    }
+    return result;
+}
+
+vec3 octahedralDecode(vec2 o) {
+    vec3 v = vec3(o.x, o.y, 1.0 - abs(o.x) - abs(o.y));
+    if (v.z < 0.0) {
+        v.xy = (1.0 - abs(v.yx)) * signNotZero(v.xy);
+    }
+    return normalize(v);
+}
+
+// Vector to Integer Packing
+
 const float INT8_SCALE     = 255;
 const float INT8_SCALE_INV = 1 / INT8_SCALE;
 
@@ -81,5 +109,39 @@ float vec2ToI16_f(vec2 x) {
     ivec2 ix = ivec2(x * INT8_SCALE);
     return float( ix.x | ix.y << 8 ) * INT16_SCALE_INV;
 }
+
+
+vec2 vec4to16x2(vec4 data) {
+    ivec4 idata = ivec4(saturate(data) * 255 + 0.5);
+    ivec2 encoded = ivec2(idata.x, idata.z);
+    encoded.x += idata.y << 8;
+    encoded.y += idata.w << 8;
+    return vec2(encoded) * (1./65535);
+}
+vec4 vec2x16to4(vec2 encoded) {
+    ivec2 ienc  = ivec2(encoded * 65535);
+    ivec4 idata = ivec4(ienc.x & 255, 0, ienc.y & 255, 0);
+    idata.y = ienc.x >> 8;
+    idata.w = ienc.y >> 8;
+    return vec4(idata) * (1./255);
+}
+
+uint vec4toUI(vec4 data) {
+    uvec4 idata = uvec4(saturate(data) * 255 + 0.5);
+    uint encoded = idata.x;
+    encoded     += idata.y << 8u;
+    encoded     += idata.z << 16u;
+    encoded     += idata.w << 24u;
+    return encoded;
+}
+vec4 UItovec4(uint encoded) {
+    return vec4(
+		float(encoded & 255u) * (1./255),
+		float((encoded >> 8u) & 255u) * (1./255),
+		float((encoded >> 16u) & 255u) * (1./255),
+		float(encoded >> 24u) * (1./255)
+	);
+}
+
 
 #endif

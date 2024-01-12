@@ -1,6 +1,8 @@
 #if !defined CORE_RANDOM
 #define CORE_RANDOM
 
+// Random Functions
+
 float rand(float x) {
     return fract(sin(x * 12.9898) * 4375.5453123);
 }
@@ -16,7 +18,9 @@ vec2 rand2(vec2 x) {
     float t = rand(x);
     return vec2(t, rand(t * 50 - 25));
 }
-        
+
+// Smoothstep Value Noise
+
 float noise(vec2 x) {
     vec2 i = floor(x);
     vec2 f = fract(x);
@@ -40,6 +44,32 @@ float noise(float x) {
 
 	return smoothstep(a, b, f);
 }
+
+vec2 noise2(float x) {
+    float i = floor(x);
+    float f = fract(x);
+
+	// Two connecting points
+	vec2 a = rand2(i);
+    vec2 b = rand2(i + 1.0);
+
+	return smoothstep(a, b, vec2(f));
+}
+vec2 noise2(vec2 x) {
+    vec2 i = floor(x);
+    vec2 f = fract(x);
+
+	// Four corners in 2D of a tile
+	vec2 a = rand2(i);
+    vec2 b = rand2(i + vec2(1.0, 0.0));
+    vec2 c = rand2(i + vec2(0.0, 1.0));
+    vec2 d = rand2(i + vec2(1.0, 1.0));
+
+    vec2 u = f * f * (3.0 - 2.0 * f);
+	return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+}
+
+// Fractal Noise
 
 float fbm(vec2 x, int n) {
 	float v = .0;

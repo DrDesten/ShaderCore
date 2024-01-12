@@ -1,42 +1,6 @@
 #if !defined CORE_MATRIX
 #define CORE_MATRIX
 
-////////////////////////////////////////////////////////////////////////
-// Matrix Transformations
-
-vec3 projectOrthographicMAD(in vec3 position, in mat4 projectionMatrix) {
-    return vec3(projectionMatrix[0].x, projectionMatrix[1].y, projectionMatrix[2].z) * position + projectionMatrix[3].xyz;
-}
-vec2 projectOrthographicMAD(in vec2 position, in mat4x2 projectionMatrix) {
-    return vec2(projectionMatrix[0].x, projectionMatrix[1].y) * position + projectionMatrix[3].xy;
-}
-vec3 projectPerspectiveMAD(in vec3 position, in mat4 projectionMatrix) {
-    return projectOrthographicMAD(position, projectionMatrix) / -position.z;
-}
-vec2 projectPerspectiveMAD(in vec3 position, in mat4x2 projectionMatrix) {
-    return projectOrthographicMAD(position.xy, projectionMatrix) / -position.z;
-}
-vec4 projectHomogeneousMAD(in vec3 position, in mat4 projectionMatrix) {
-    return vec4(projectOrthographicMAD(position, projectionMatrix), -position.z);
-}
-
-vec3 unprojectOrthographicMAD(in vec2 position, in mat4 inverseProjectionMatrix) {
-    return vec3(vec2(inverseProjectionMatrix[0].x, inverseProjectionMatrix[1].y) * position + inverseProjectionMatrix[3].xy, inverseProjectionMatrix[3].z);
-}
-vec3 unprojectPerspectiveMAD(in vec3 position, in mat4 inverseProjectionMatrix) {
-    return unprojectOrthographicMAD(position.xy, inverseProjectionMatrix) / (inverseProjectionMatrix[2].w * position.z + inverseProjectionMatrix[3].w);
-}
-vec4 unprojectHomogeneousMAD(in vec3 position, in mat4 inverseProjectionMatrix) {
-    return vec4(unprojectOrthographicMAD(position.xy, inverseProjectionMatrix), inverseProjectionMatrix[2].w * position.z + inverseProjectionMatrix[3].w);
-}
-vec3 transformMAD(in vec3 position, in mat4 transformationMatrix) {
-    return mat3(transformationMatrix) * position + transformationMatrix[3].xyz;
-}
-
-
-////////////////////////////////////////////////////////////////////////
-// Other Matrix Functions
-
 #define MAT2_ROT(angle, scale) \
     (mat2(cos(angle), sin(angle), -sin(angle), cos(angle)) * scale);
 
