@@ -33,6 +33,10 @@ vec3 applyVibrance(vec3 color, float vibrance) { // -1 to 1
 	return applySaturation(color, (1 - saturation) * vibrance + 1);
 }
 
+#ifndef GAMMA
+#define GAMMA 2.2
+#endif
+
 vec3 gamma(vec3 color) {
     return pow(color, vec3(GAMMA));
 }
