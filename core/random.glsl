@@ -27,9 +27,9 @@ float noise(vec2 x) {
 
 	// Four corners in 2D of a tile
 	float a = rand(i);
-    float b = rand(i + vec2(1.0, 0.0));
-    float c = rand(i + vec2(0.0, 1.0));
-    float d = rand(i + vec2(1.0, 1.0));
+    float b = rand(i + vec2(1,0));
+    float c = rand(i + vec2(0,1));
+    float d = rand(i + vec2(1,1));
 
     vec2 u = f * f * (3.0 - 2.0 * f);
 	return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
@@ -72,12 +72,12 @@ vec2 noise2(vec2 x) {
 // Fractal Noise
 
 float fbm(vec2 x, int n) {
-	float v = 0.0;
-	float a = 0.5;
+	float v = .0;
+	float a = .5;
 	vec2 shift = vec2(100);
 
 	// Rotate to reduce axial bias
-    const mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.50));
+    const mat2 rot = mat2(cos(.5), sin(.5), -sin(.5), cos(.5));
 
 	for (int i = 0; i < n; ++i) {
 		v += a * noise(x);
@@ -88,12 +88,12 @@ float fbm(vec2 x, int n) {
 }
 
 float fbm(vec2 x, int n, float scale, float falloff) {
-	float v = 0.0;
-	float a = 0.5;
+	float v = .0;
+	float a = .5;
 	vec2 shift = vec2(100);
 
 	// Rotate to reduce axial bias
-    const mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.50));
+    const mat2 rot = mat2(cos(.5), sin(.5), -sin(.5), cos(.5));
 
 	for (int i = 0; i < n; ++i) {
 		v += a * noise(x);
@@ -102,6 +102,23 @@ float fbm(vec2 x, int n, float scale, float falloff) {
 	}
 	return v;
 }
+
+float stretched_fbm(vec2 x, int n, float scale, float falloff, float stretch) {
+	float v = .0;
+	float a = .5;
+	vec2 shift = vec2(100);
+
+	// Rotate to reduce axial bias
+    const mat2 rot = mat2(cos(.5), sin(.5), -sin(.5), cos(.5));
+
+	for (int i = 0; i < n; ++i) {
+		v += a * noise(x * vec2(1, stretch));
+		x  = rot * x * scale + shift;
+		a *= falloff;
+	}
+	return v;
+}
+
 
 float voronoiSmooth(vec2 coord, float size, int complexity, float time) {
     vec2 uv  = coord;

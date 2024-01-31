@@ -5,8 +5,7 @@
     (mat2(cos(angle), sin(angle), -sin(angle), cos(angle)) * scale);
 
 mat2 mat2Rot(float angle) {
-    float ca = cos(angle);
-    float sa = sin(angle);
+    float ca = cos(angle), sa = sin(angle);
     return mat2(ca, sa, -sa, ca);
 }
 

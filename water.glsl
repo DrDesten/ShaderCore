@@ -56,26 +56,18 @@ float waterVertexOffset(vec3 pos, float time) {
 }
 
 vec3 waterNormalsSine(vec3 pos, float time, float strength) {
-    time = mod(time, 1000) - 500;
+    float globalAmplitude = noise(pos.xz * 0.01 + 100);
+    float globalAngle     = noise(pos.xz * 0.001) * TWO_PI;
+    float globalTime      = mod(time, 1000) - 500;
 
-    float angleNoise  = noise(pos.xz * .03);
-    float angleNoise2 = noise(pos.xz * .03 - 100);
-    float angles[5] = float[5](
-        time *  0.03,
-        time * -0.05 + angleNoise,
-        time *  0.02 - angleNoise,
-        time * -0.04 + angleNoise2,
-        time *  0.08 - angleNoise2
-    );
-    
     vec3  normal = vec3(0);
-    float amp    = strength;
-    for (int i = 0; i < 5; i++) {
+    float amp    = strength * globalAmplitude * 2;
+    for (int i = 1; i <= 3; i++) {
         pos.xz *= 1.5;
         amp    *= 0.5;
 
-        float offset = time * (0.5 + i * .5) + noise(pos.xz * .075) * 8;
-        normal      += rotatedWaveNormals(pos.xz, offset, angles[i], amp);
+        float offset = globalTime * i + noise(pos.xz * .075) * 8;
+        normal      += rotatedWaveNormals(pos.xz, offset, globalAngle, amp);
     }
 
     return normalize(normal);

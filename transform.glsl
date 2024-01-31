@@ -1,5 +1,5 @@
-#if !defined CORE_TRANSFORM
-#define CORE_TRANSFORM
+#if !defined CORE_TRANSFORM_2
+#define CORE_TRANSFORM_2
 
 uniform vec3 cameraPosition,    previousCameraPosition;
 uniform mat4 gbufferModelView,  gbufferModelViewInverse,  gbufferPreviousModelView;
