@@ -229,6 +229,21 @@ vec4 sqrtf01(vec4 x) {
     return x * (2.0 - x);
 }
 
+// 4th Root Approximations
+
+float qrtf(float x) {
+    return 1 - (x - 1) * (x - 1);
+}
+vec2 qrtf(vec2 x) {
+    return 1 - (x - 1) * (x - 1);
+}
+vec3 qrtf(vec3 x) {
+    return 1 - (x - 1) * (x - 1);
+}
+vec4 qrtf(vec4 x) {
+    return 1 - (x - 1) * (x - 1);
+}
+
 // Quadratic functions where f(0.5) = 1 and f(0) = f(1) = 0 
 
 float peak05(float x) { 
