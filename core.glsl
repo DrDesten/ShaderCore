@@ -7,6 +7,7 @@
 #include "core/matrix.glsl"
 #include "core/packing.glsl"
 #include "core/random.glsl"
+#include "core/sampler.glsl"
 #include "core/tonemap.glsl"
 #include "core/transform.glsl"
 #include "core/utils.glsl"
