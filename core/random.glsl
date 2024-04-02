@@ -9,6 +9,9 @@ float rand(float x) {
 float rand(vec2 x) {
     return fract(sin(x.x * 12.9898 + x.y * 78.233) * 4375.5453);
 }
+float rand(vec3 x){
+    return fract(sin(dot(x, vec3(64.25375463, 23.27536534, 86.29678483))) * 59482.7542);
+}
 
 vec2 rand2(float x) {
     float t = rand(x);
