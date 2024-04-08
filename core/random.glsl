@@ -82,7 +82,7 @@ float fbm(vec2 x, int n) {
 	// Rotate to reduce axial bias
     const mat2 rot = mat2(cos(.5), sin(.5), -sin(.5), cos(.5));
 
-	for (int i = 0; i < n; ++i) {
+	for (int i = 0; i < n; i++) {
 		v += a * noise(x);
 		x  = rot * x * 2.0 + shift;
 		a *= 0.5;
@@ -98,7 +98,7 @@ float fbm(vec2 x, int n, float scale, float falloff) {
 	// Rotate to reduce axial bias
     const mat2 rot = mat2(cos(.5), sin(.5), -sin(.5), cos(.5));
 
-	for (int i = 0; i < n; ++i) {
+	for (int i = 0; i < n; i++) {
 		v += a * noise(x);
 		x  = rot * x * scale + shift;
 		a *= falloff;
@@ -114,7 +114,7 @@ float stretched_fbm(vec2 x, int n, float scale, float falloff, float stretch) {
 	// Rotate to reduce axial bias
     const mat2 rot = mat2(cos(.5), sin(.5), -sin(.5), cos(.5));
 
-	for (int i = 0; i < n; ++i) {
+	for (int i = 0; i < n; i++) {
 		v += a * noise(x * vec2(1, stretch));
 		x  = rot * x * scale + shift;
 		a *= falloff;
