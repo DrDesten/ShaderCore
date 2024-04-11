@@ -112,7 +112,7 @@ vec3 reprojectTAA(vec3 screenPos) {
     pos      = toPrevPlayer(pos);
     pos      = toPrevView(pos);
     return     toPrevScreen(pos);
-}
+}/* 
 
 vec2 motionBlur(vec3 screenPos) {
     if (screenPos.z < 0.56) return vec2(0);
@@ -123,5 +123,5 @@ vec2 motionBlur(vec3 screenPos) {
 	
     return motionVector * (0.25 * MOTION_BLUR_STRENGTH);
 }
-
+ */
 #endif

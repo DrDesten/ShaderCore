@@ -10,7 +10,7 @@ mat2 mat2Rot(float angle) {
 }
 
 #define VEC2_ROT(angle, length) \
-    vec2(cos(angle), sin(angle));
+    (vec2(cos(angle), sin(angle)) * length);
 
 vec2 vec2Rot(float angle) {
     return vec2(cos(angle), sin(angle));
