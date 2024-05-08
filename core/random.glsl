@@ -127,7 +127,30 @@ float snoise(vec3 x) {
     float a = rand(i), b = rand(i+1);
     return mix(a, b, f);
 } */
-float pnoise(vec2 x) {
+float lpnoiseRaw(vec2 x) {
+    vec2 cell = floor(x);
+    vec2 frac = fract(x);
+
+    vec2 p  = cell + frac;
+    vec2 pa = cell;
+    vec2 pb = cell + vec2(1,0);
+    vec2 pc = cell + vec2(0,1);
+    vec2 pd = cell + vec2(1,1);
+
+	vec2 a = vec2Rot(rand(pa) * TWO_PI);
+    vec2 b = vec2Rot(rand(pb) * TWO_PI);
+    vec2 c = vec2Rot(rand(pc) * TWO_PI);
+    vec2 d = vec2Rot(rand(pd) * TWO_PI);
+    return mix(
+        mix(dot(a, p-pa), dot(b, p-pb), frac.x),
+        mix(dot(c, p-pc), dot(d, p-pd), frac.x),
+        frac.y
+    );
+}
+float lpnoise(vec2 x) {
+    return lpnoiseRaw(x) * (SQRT2 / 2) + 0.5;
+}
+float pnoiseRaw(vec2 x) {
     vec2 cell = floor(x);
     vec2 frac = fract(x);
     vec2 interpolation = frac * frac * (3.0 - 2.0 * frac);
@@ -138,15 +161,18 @@ float pnoise(vec2 x) {
     vec2 pc = cell + vec2(0,1);
     vec2 pd = cell + vec2(1,1);
 
-	vec2 a = vec2Rot(rand(pa / 1.) * TWO_PI);
-    vec2 b = vec2Rot(rand(pb / 1.) * TWO_PI);
-    vec2 c = vec2Rot(rand(pc / 1.) * TWO_PI);
-    vec2 d = vec2Rot(rand(pd / 1.) * TWO_PI);
+	vec2 a = vec2Rot(rand(pa) * TWO_PI);
+    vec2 b = vec2Rot(rand(pb) * TWO_PI);
+    vec2 c = vec2Rot(rand(pc) * TWO_PI);
+    vec2 d = vec2Rot(rand(pd) * TWO_PI);
     return mix(
         mix(dot(a, p-pa), dot(b, p-pb), interpolation.x),
         mix(dot(c, p-pc), dot(d, p-pd), interpolation.x),
         interpolation.y
     );
+}
+float pnoise(vec2 x) {
+    return pnoiseRaw(x) * (SQRT2 / 2) + 0.5;
 }
 /* float pnoise(vec3 x) {
     vec3 i = floor(x);

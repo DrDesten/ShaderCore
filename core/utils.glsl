@@ -214,6 +214,21 @@ vec4 sigmoid(vec4 x) {
     return 1 / (1 + exp(-x));
 }
 
+// Sigmoid (f'(0) == 1)
+
+float sigmoidNorm(float x) {
+    return 1 / (1 + exp2(x * -log2(exp(4))));
+}
+vec2 sigmoidNorm(vec2 x) {
+    return 1 / (1 + exp2(x * -log2(exp(4))));
+}
+vec3 sigmoidNorm(vec3 x) {
+    return 1 / (1 + exp2(x * -log2(exp(4))));
+}
+vec4 sigmoidNorm(vec4 x) {
+    return 1 / (1 + exp2(x * -log2(exp(4))));
+}
+
 // Square Root Approximations
 
 float sqrtf01(float x) {
