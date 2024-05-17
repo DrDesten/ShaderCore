@@ -284,6 +284,19 @@ float smootherstep(float edge0, float edge1, float x) {
     return cb(x) * (x * (6. * x - 15.) + 10.);
 }
 
+// y = x symmetric lift curve
+// lift in range ]-1, 1[ x in range ]0, 1[
+
+float diagosymmetricLift(float x, float lift) {
+    if (lift == 0) return x;
+    const float liftSensitivity = 50;
+    float liftFactor = 1 / (liftSensitivity * sq(lift)) - 1 / liftSensitivity;
+    float curveShift = -0.5 + sqrt( 0.25 + liftFactor );
+    return lift > 0
+        ? 1 - ( liftFactor / ( x + curveShift ) - curveShift )
+        : liftFactor / ( 1 - x + curveShift ) - curveShift;
+}
+
 // Map Range
 
 float map(float value, float from_min, float from_max, float to_min, float to_max) {
