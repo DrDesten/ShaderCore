@@ -289,7 +289,7 @@ float smootherstep(float edge0, float edge1, float x) {
 
 float diagosymmetricLift(float x, float lift) {
     if (lift == 0) return x;
-    const float liftSensitivity = 50;
+    const float liftSensitivity = 4;
     float liftFactor = 1 / (liftSensitivity * sq(lift)) - 1 / liftSensitivity;
     float curveShift = -0.5 + sqrt( 0.25 + liftFactor );
     return lift > 0
