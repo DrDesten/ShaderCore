@@ -19,7 +19,7 @@ vec3 applyBrightness(vec3 color, float brightness) { // Range: ]-1, 1[
         diagosymmetricLift(color.r, brightness),
         diagosymmetricLift(color.g, brightness),
         diagosymmetricLift(color.b, brightness)
-    )
+    );
 }
 vec3 applyContrast(vec3 color, float contrast) { // Range: 0-inf
 	color = color * 0.99 + 0.005;
