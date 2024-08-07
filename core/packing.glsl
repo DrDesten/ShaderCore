@@ -3,6 +3,18 @@
 
 // Normal Packing
 
+vec2 spheremapEncode(vec3 n) {
+    float p = sqrt(n.z * 8. + 8.);
+    return vec2(n.xy / p + 0.5);
+}
+
+vec3 spheremapDecode(vec2 v) {
+    vec2 fenc = v * 4. - 2.;
+    float f = dot(fenc, fenc);
+    float g = sqrt(1. - f / 4.);
+    return vec3(fenc * g, 1. - f / 2.);
+}
+
 vec2 signNotZero(vec2 v) {
     return vec2(
         v.x >= 0. ? 1. : -1., 
@@ -10,21 +22,21 @@ vec2 signNotZero(vec2 v) {
     );
 }
 
-vec2 octahedralEncode(in vec3 v) {
-    float l1norm = abs(v.x) + abs(v.y) + abs(v.z);
-    vec2  result = v.xy * (1.0 / l1norm);
-    if (v.z < 0.0) {
+vec2 octahedralEncode(vec3 n) {
+    float l1norm = abs(n.x) + abs(n.y) + abs(n.z);
+    vec2  result = n.xy * (1.0 / l1norm);
+    if (n.z < 0.0) {
         result = (1.0 - abs(result.yx)) * signNotZero(result.xy);
     }
     return result;
 }
 
-vec3 octahedralDecode(vec2 o) {
-    vec3 v = vec3(o.x, o.y, 1.0 - abs(o.x) - abs(o.y));
-    if (v.z < 0.0) {
-        v.xy = (1.0 - abs(v.yx)) * signNotZero(v.xy);
+vec3 octahedralDecode(vec2 v) {
+    vec3 n = vec3(v.x, v.y, 1.0 - abs(v.x) - abs(v.y));
+    if (n.z < 0.0) {
+        n.xy = (1.0 - abs(n.yx)) * signNotZero(n.xy);
     }
-    return normalize(v);
+    return normalize(n);
 }
 
 // Vector to Integer Packing
