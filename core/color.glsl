@@ -14,10 +14,12 @@ float saturation(vec3 color) {
 }
 
 
-vec3 applyBrightness(vec3 color, float brightness, float colorOffset) { // Range: inf-0
-	float tmp = 1 / (2 * colorOffset + 1);
-	color = color * tmp + (colorOffset * tmp);
-	return pow(color, vec3(brightness));
+vec3 applyBrightness(vec3 color, float brightness) { // Range: ]-1, 1[
+    return vec3(
+        diagosymmetricLift(color.r, brightness),
+        diagosymmetricLift(color.g, brightness),
+        diagosymmetricLift(color.b, brightness)
+    );
 }
 vec3 applyContrast(vec3 color, float contrast) { // Range: 0-inf
 	color = color * 0.99 + 0.005;
