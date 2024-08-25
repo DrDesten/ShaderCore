@@ -48,7 +48,8 @@ mat3 rotationMatrix3D(vec3 axis, float angle) {
 
 vec3 arbitraryTangent(vec3 normal) {
     // Equivalent to: normalize( cross(normal, vec3(0,0,1)) )
-    return vec3(normal.y, -normal.x, 0) * (1 / sqrt( sqmag( normal.xy ) ));
+    //return vec3(normal.y, -normal.x, 0) * (1 / sqrt( sqmag( normal.xy ) ));
+    return vec3(normalize(vec2(normal.y, -normal.x)), 0);
 }
 
 mat3 arbitraryTBN(vec3 normal) {
