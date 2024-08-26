@@ -5,7 +5,7 @@
 
 uniform float dhNearPlane;
 uniform float dhFarPlane;
-uniform int dhRenderDistance;
+uniform int   dhRenderDistance;
 
 uniform mat4 dhProjection;
 uniform mat4 dhProjectionInverse;

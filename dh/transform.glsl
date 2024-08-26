@@ -1,10 +1,10 @@
 #ifndef CORE_DH_TRANSFORM
 #define CORE_DH_TRANSFORM
 
+#ifdef DISTANT_HORIZONS
+
 #include "../core/transform.glsl"
 #include "uniforms.glsl"
-
-#ifdef DISTANT_HORIZONS
 
 vec3 toViewDH(vec3 clipPos) { // Clippos to viewpos
     return unprojectPerspectiveMAD(clipPos, dhProjectionInverse);
