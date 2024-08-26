@@ -54,7 +54,7 @@ vec4 backToClipW(vec3 viewpos) { // viewpos to clip pos
 }
 
 vec3 backToScreen(vec3 viewpos) { // viewpos to screen pos
-    return projectPerspectiveMAD(viewpos, gbufferProjection) * 0.5 + 0.5;
+    return backToClip(viewpos) * 0.5 + 0.5;
 }
 
 
@@ -112,16 +112,6 @@ vec3 reprojectTAA(vec3 screenPos) {
     pos      = toPrevPlayer(pos);
     pos      = toPrevView(pos);
     return     toPrevScreen(pos);
-}/* 
-
-vec2 motionBlur(vec3 screenPos) {
-    if (screenPos.z < 0.56) return vec2(0);
-    
-    vec3 prevScreenPos = toPrevScreen(toPrevView(toPrevPlayer(toWorld(toPlayer(toView(screenPos * 2 - 1))))));
-    vec2 motionVector  = screenPos.xy - prevScreenPos.xy;
-    motionVector      /= length(motionVector) + 0.25; //Basically Reinhard Tonemapping (but on motion blur lol)
-	
-    return motionVector * (0.25 * MOTION_BLUR_STRENGTH);
 }
- */
+
 #endif
