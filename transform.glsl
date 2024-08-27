@@ -72,11 +72,27 @@ vec3 eyeToPrevView(vec3 prevplayereye) { // previous playereyepos to previous vi
 vec3 toPrevClip(vec3 prevviewpos) { // previous viewpos to previous screen pos
     return projectPerspectiveMAD(prevviewpos, gbufferPreviousProjection);
 }
+vec4 toPrevClipW(vec3 prevviewpos) { // previous viewpos to previous screen pos
+    vec4 tmp = projectHomogeneousMAD(prevviewpos, gbufferPreviousProjection);
+    return vec4(tmp.xyz / tmp.w, tmp.w);
+}
 vec3 toPrevScreen(vec3 prevviewpos) { // previous viewpos to previous screen pos
     return projectPerspectiveMAD(prevviewpos, gbufferPreviousProjection) * 0.5 + 0.5;
 }
 
 
+vec4 reprojectScreen(vec3 screenPos) {
+    // Project to World Space
+    vec3 pos = toView(screenPos * 2 - 1);
+    pos      = toPlayer(pos);
+    pos      = toWorld(pos);
+
+    // Project to previous Screen Space
+    pos       = toPrevPlayer(pos);
+    pos       = toPrevView(pos);
+    vec4 clip = toPrevClipW(pos);
+    return vec4(clip.xyz * .5 + .5, clip.w);
+}
 vec3 previousReproject(vec3 clipPos) {
     // Project to World Space
     vec3 pos = toView(clipPos);
@@ -112,6 +128,19 @@ vec3 reprojectTAA(vec3 screenPos) {
     pos      = toPrevPlayer(pos);
     pos      = toPrevView(pos);
     return     toPrevScreen(pos);
+}
+
+vec3 screenSpaceMovement(vec3 clipPos, vec3 weight) {
+    // Project to Player Space
+    vec3 pos = toView(clipPos);
+    pos      = toPlayer(pos);
+
+    // Calculate World Space
+    pos      += (cameraPosition - previousCameraPosition) * 1;
+
+    // Project to previous Screen Space
+    pos      = backToView(pos);
+    return     backToScreen(pos);
 }
 
 #endif
