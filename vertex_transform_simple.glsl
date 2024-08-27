@@ -1,5 +1,5 @@
-#if !defined CORE_VERTEX_TRANSFORM
-#define CORE_VERTEX_TRANSFORM
+#if !defined CORE_VERTEX_TRANSFORM_SIMPLE
+#define CORE_VERTEX_TRANSFORM_SIMPLE
 
 // In Geometry Shaders, gl_* vertex attributes are not available
 #ifndef GEO

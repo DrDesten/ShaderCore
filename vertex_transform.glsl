@@ -1,5 +1,5 @@
-#if !defined CORE_VERTEX_TRANSFORM_SIMPLE
-#define CORE_VERTEX_TRANSFORM_SIMPLE
+#if !defined CORE_VERTEX_TRANSFORM
+#define CORE_VERTEX_TRANSFORM
 
 uniform vec3 cameraPosition;
 uniform mat4 gbufferModelView;
