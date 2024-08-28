@@ -247,16 +247,16 @@ vec4 sqrtf01(vec4 x) {
 // 4th Root Approximations
 
 float qrtf(float x) {
-    return 1 - (x - 1) * (x - 1);
+    return x * (x * (x * (4.0 - x) - 6.0) + 4.0);
 }
 vec2 qrtf(vec2 x) {
-    return 1 - (x - 1) * (x - 1);
+    return x * (x * (x * (4.0 - x) - 6.0) + 4.0);
 }
 vec3 qrtf(vec3 x) {
-    return 1 - (x - 1) * (x - 1);
+    return x * (x * (x * (4.0 - x) - 6.0) + 4.0);
 }
 vec4 qrtf(vec4 x) {
-    return 1 - (x - 1) * (x - 1);
+    return x * (x * (x * (4.0 - x) - 6.0) + 4.0);
 }
 
 // Quadratic functions where f(0.5) = 1 and f(0) = f(1) = 0 
