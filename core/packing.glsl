@@ -41,14 +41,14 @@ vec3 octahedralDecode(vec2 v) {
 
 // Vector to Integer Packing
 
-const float INT8_SCALE     = 255;
-const float INT8_SCALE_INV = 1 / INT8_SCALE;
+const float INT8_SCALE     = 255.;
+const float INT8_SCALE_INV = 1. / INT8_SCALE;
 
-const float INT16_SCALE     = 65535;
-const float INT16_SCALE_INV = 1 / INT16_SCALE;
+const float INT16_SCALE     = 65535.;
+const float INT16_SCALE_INV = 1. / INT16_SCALE;
 
-const float INT24_SCALE     = 16777215;
-const float INT24_SCALE_INV = 1 / INT24_SCALE;
+const float INT24_SCALE     = 16777215.;
+const float INT24_SCALE_INV = 1. / INT24_SCALE;
 
 // i24 -> vec3
 // .x = ObABCDEF
@@ -128,18 +128,18 @@ vec2 vec4to16x2(vec4 data) {
     ivec2 encoded = ivec2(idata.x, idata.z);
     encoded.x += idata.y << 8;
     encoded.y += idata.w << 8;
-    return vec2(encoded) * (1./65535);
+    return vec2(encoded) * (1./65535.);
 }
 vec4 vec2x16to4(vec2 encoded) {
-    ivec2 ienc  = ivec2(encoded * 65535);
-    ivec4 idata = ivec4(ienc.x & 255, 0, ienc.y & 255, 0);
+    ivec2 ienc  = ivec2(encoded * 65535.);
+    ivec4 idata = ivec4(ienc.x & 255, 0., ienc.y & 255, 0.);
     idata.y = ienc.x >> 8;
     idata.w = ienc.y >> 8;
-    return vec4(idata) * (1./255);
+    return vec4(idata) * (1./255.);
 }
 
 uint vec4toUI(vec4 data) {
-    uvec4 idata = uvec4(saturate(data) * 255 + 0.5);
+    uvec4 idata = uvec4(saturate(data) * 255. + 0.5);
     uint encoded = idata.x;
     encoded     += idata.y << 8u;
     encoded     += idata.z << 16u;
@@ -148,10 +148,10 @@ uint vec4toUI(vec4 data) {
 }
 vec4 UItovec4(uint encoded) {
     return vec4(
-		float(encoded & 255u) * (1./255),
-		float((encoded >> 8u) & 255u) * (1./255),
-		float((encoded >> 16u) & 255u) * (1./255),
-		float(encoded >> 24u) * (1./255)
+		float(encoded & 255u) * (1./255.),
+		float((encoded >> 8u) & 255u) * (1./255.),
+		float((encoded >> 16u) & 255u) * (1./255.),
+		float(encoded >> 24u) * (1./255.)
 	);
 }
 

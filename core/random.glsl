@@ -18,15 +18,15 @@ float rand(vec3 x){
 
 vec2 rand2(float x) {
     float t = rand(x);
-    return vec2(t, rand(t * 50 - 25));
+    return vec2(t, rand(t * 50. - 25.));
 }
 vec2 rand2(vec2 x) {
     float t = rand(x);
-    return vec2(t, rand(t * 50 - 25));
+    return vec2(t, rand(t * 50. - 25.));
 }
 vec2 rand2(vec3 x) {
     float t = rand(x);
-    return vec2(t, rand(t * 50 - 25));
+    return vec2(t, rand(t * 50. - 25.));
 }
 
 // Linear Value Noise
@@ -34,7 +34,7 @@ vec2 rand2(vec3 x) {
 float lnoise(float x) {
     float i = floor(x);
     float f = fract(x);
-    float a = rand(i), b = rand(i+1);
+    float a = rand(i), b = rand(i+1.);
     return mix(a, b, f);
 }
 float lnoise(vec2 x) {
@@ -78,7 +78,7 @@ float snoise(float x) {
     float f = fract(x);
     f = f * f * (3.0 - 2.0 * f);
 
-    float a = rand(i), b = rand(i+1);
+    float a = rand(i), b = rand(i+1.);
     return mix(a, b, f);
 }
 float snoise(vec2 x) {
@@ -148,7 +148,7 @@ float lpnoiseRaw(vec2 x) {
     );
 }
 float lpnoise(vec2 x) {
-    return lpnoiseRaw(x) * (SQRT2 / 2) + 0.5;
+    return lpnoiseRaw(x) * (SQRT2 / 2.) + 0.5;
 }
 float pnoiseRaw(vec2 x) {
     vec2 cell = floor(x);
@@ -172,7 +172,7 @@ float pnoiseRaw(vec2 x) {
     );
 }
 float pnoise(vec2 x) {
-    return pnoiseRaw(x) * (SQRT2 / 2) + 0.5;
+    return pnoiseRaw(x) * (SQRT2 / 2.) + 0.5;
 }
 /* float pnoise(vec3 x) {
     vec3 i = floor(x);

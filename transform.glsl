@@ -83,7 +83,7 @@ vec3 toPrevScreen(vec3 prevviewpos) { // previous viewpos to previous screen pos
 
 vec4 reprojectScreen(vec3 screenPos) {
     // Project to World Space
-    vec3 pos = toView(screenPos * 2 - 1);
+    vec3 pos = toView(screenPos * 2. - 1.);
     pos      = toPlayer(pos);
     pos      = toWorld(pos);
 
@@ -120,7 +120,7 @@ vec3 reprojectTAA(vec3 screenPos) {
     if (screenPos.z < 0.56) return screenPos;
 
     // Project to World Space
-    vec3 pos = toView(screenPos * 2 - 1);
+    vec3 pos = toView(screenPos * 2. - 1.);
     pos      = toPlayer(pos);
     pos      = toWorld(pos);
 
@@ -136,7 +136,7 @@ vec3 screenSpaceMovement(vec3 clipPos, vec3 weight) {
     pos      = toPlayer(pos);
 
     // Calculate World Space
-    pos      += (cameraPosition - previousCameraPosition) * 1;
+    pos      += (cameraPosition - previousCameraPosition) * 1.;
 
     // Project to previous Screen Space
     pos      = backToView(pos);

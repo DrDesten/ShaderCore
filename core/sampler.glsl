@@ -35,15 +35,15 @@ vec4 cubic(float v) {
 }
 
 float triangle(float x) {
-    return saturate(1 - abs(x));
+    return saturate(1. - abs(x));
 }
 
 float sincNorm(float x) {
-    return x == 0 ? 1 : sin(x*PI) / (x*PI);
+    return x == 0. ? 1. : sin(x*PI) / (x*PI);
 }
 
 float bell(float x) {
-    return exp(-(x*x*2));
+    return exp(-(x*x*2.));
 }
 
 vec4 textureBicubic(sampler2D tex, vec2 coord, vec2 samplerSize, vec2 pixelSize) {

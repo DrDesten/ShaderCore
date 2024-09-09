@@ -19,7 +19,7 @@ vec3 tm_reinhard_sqrt(vec3 color, float a) {
     return color / sqrt(color * color + a);
 }
 vec3 tm_reinhard_sqrt_inverse(vec3 color, float a) {
-    return sqrt(a) * color * inversesqrt(-color * color + 1);
+    return sqrt(a) * color * inversesqrt(-color * color + 1.);
 }
 
 
@@ -29,7 +29,7 @@ vec3 tm_unreal(vec3 color) {
 
 
 vec3 tm_exp(vec3 color, float a) {
-    return 1 - exp(-color * a);
+    return 1. - exp(-color * a);
 }
 
 #endif

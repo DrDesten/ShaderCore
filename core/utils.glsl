@@ -76,25 +76,25 @@ float sum(vec4 v) {
 // Average of Components
 
 float avg(vec2 v) {
-    return (v.x + v.y) / 2;
+    return (v.x + v.y) / 2.;
 }
 float avg(vec3 v) {
-    return (v.x + v.y + v.z) / 3;
+    return (v.x + v.y + v.z) / 3.;
 }
 float avg(vec4 v) {
-    return ((v.x + v.y) + (v.z + v.w)) / 4;
+    return ((v.x + v.y) + (v.z + v.w)) / 4.;
 }
 
 // Vector Midpoint
 
 vec2 midpoint(vec2 v1, vec2 v2) {
-    return (v1 + v2) / 2;
+    return (v1 + v2) / 2.;
 }
 vec3 midpoint(vec3 v1, vec3 v2) {
-    return (v1 + v2) / 2;
+    return (v1 + v2) / 2.;
 }
 vec4 midpoint(vec4 v1, vec4 v2) {
-    return (v1 + v2) / 2;
+    return (v1 + v2) / 2.;
 }
 
 // Square Length
@@ -202,31 +202,31 @@ float logn(float base, float x) {
 // Sigmoid
 
 float sigmoid(float x) {
-    return 1 / (1 + exp(-x));
+    return 1. / (1. + exp(-x));
 }
 vec2 sigmoid(vec2 x) {
-    return 1 / (1 + exp(-x));
+    return 1. / (1. + exp(-x));
 }
 vec3 sigmoid(vec3 x) {
-    return 1 / (1 + exp(-x));
+    return 1. / (1. + exp(-x));
 }
 vec4 sigmoid(vec4 x) {
-    return 1 / (1 + exp(-x));
+    return 1. / (1. + exp(-x));
 }
 
 // Sigmoid (f'(0) == 1)
 
 float sigmoidNorm(float x) {
-    return 1 / (1 + exp2(x * -log2(exp(4))));
+    return 1. / (1. + exp2(x * -log2(exp(4.))));
 }
 vec2 sigmoidNorm(vec2 x) {
-    return 1 / (1 + exp2(x * -log2(exp(4))));
+    return 1. / (1. + exp2(x * -log2(exp(4.))));
 }
 vec3 sigmoidNorm(vec3 x) {
-    return 1 / (1 + exp2(x * -log2(exp(4))));
+    return 1. / (1. + exp2(x * -log2(exp(4.))));
 }
 vec4 sigmoidNorm(vec4 x) {
-    return 1 / (1 + exp2(x * -log2(exp(4))));
+    return 1. / (1. + exp2(x * -log2(exp(4.))));
 }
 
 // Square Root Approximations
@@ -262,16 +262,16 @@ vec4 qrtf(vec4 x) {
 // Quadratic functions where f(0.5) = 1 and f(0) = f(1) = 0 
 
 float peak05(float x) { 
-    return x * (-4*x + 4); 
+    return x * (-4.*x + 4.); 
 }
 vec2  peak05(vec2 x) { 
-    return x * (-4*x + 4); 
+    return x * (-4.*x + 4.); 
 }
 vec3 peak05(vec3 x) { 
-    return x * (-4*x + 4); 
+    return x * (-4.*x + 4.); 
 }
 vec4 peak05(vec4 x) { 
-    return x * (-4*x + 4); 
+    return x * (-4.*x + 4.); 
 }
 
 // Smoothstep functions with smooth 2nd derivative 
@@ -288,13 +288,13 @@ float smootherstep(float edge0, float edge1, float x) {
 // lift in range ]-1, 1[ x in range ]0, 1[
 
 float diagosymmetricLift(float x, float lift) {
-    if (lift == 0) return x;
-    const float liftSensitivity = 4;
-    float liftFactor = 1 / (liftSensitivity * sq(lift)) - 1 / liftSensitivity;
+    if (lift == 0.) return x;
+    const float liftSensitivity = 4.;
+    float liftFactor = 1. / (liftSensitivity * sq(lift)) - 1. / liftSensitivity;
     float curveShift = -0.5 + sqrt( 0.25 + liftFactor );
-    return lift > 0
-        ? 1 - ( liftFactor / ( x + curveShift ) - curveShift )
-        : liftFactor / ( 1 - x + curveShift ) - curveShift;
+    return lift > 0.
+        ? 1. - ( liftFactor / ( x + curveShift ) - curveShift )
+        : liftFactor / ( 1. - x + curveShift ) - curveShift;
 }
 
 // Map Range

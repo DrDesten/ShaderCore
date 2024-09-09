@@ -28,7 +28,7 @@ float acosf(float x) {
 }
 
 float tri(float x) {
-    return abs(fract(x) * 2 - 1);
+    return abs(fract(x) * 2. - 1.);
 }
 
 #include "core/dither.glsl"
@@ -55,7 +55,7 @@ float tri(float x) {
 float lineDist2P(vec2 coord, vec2 start, vec2 end) {
     vec2 pa = coord - start;
     vec2 ba = end - start;
-    float t = clamp(dot(pa, ba) / dot(ba, ba), 0, 1);
+    float t = saturate(dot(pa, ba) / dot(ba, ba));
     return sqmag(ba * -t + pa);
 }
 float line2P(vec2 coord, vec2 start, vec2 end, float thickness) {
@@ -63,7 +63,7 @@ float line2P(vec2 coord, vec2 start, vec2 end, float thickness) {
 }
 float line2P(vec2 coord, vec2 start, vec2 end, float thickness, float slope) {
     thickness = thickness * thickness;
-    return saturate((thickness - lineDist2P(coord, start, end)) * slope + 1);
+    return saturate((thickness - lineDist2P(coord, start, end)) * slope + 1.);
 }
 
 float lineDist1P1V(vec2 coord, vec2 start, vec2 dir) {
@@ -76,7 +76,7 @@ float line1P1V(vec2 coord, vec2 start, vec2 dir, float thickness) {
 }
 float line1P1V(vec2 coord, vec2 start, vec2 dir, float thickness, float slope) {
     thickness = thickness * thickness;
-    return saturate((thickness - lineDist1P1V(coord, start, dir)) * slope + 1);
+    return saturate((thickness - lineDist1P1V(coord, start, dir)) * slope + 1.);
 }
 
 vec2 convertPolarCartesian(vec2 coord) {
@@ -85,20 +85,20 @@ vec2 convertPolarCartesian(vec2 coord) {
 
 float schlickFresnel(vec3 viewRay, vec3 normal, float refractiveIndex, float baseReflectiveness) {
     //Schlick-Approximation of Fresnel
-    float R0 = (1 - refractiveIndex) / (1 + refractiveIndex);
+    float R0 = (1. - refractiveIndex) / (1. + refractiveIndex);
     R0 *= R0;
 
     float cosAngle = dot(viewRay, normal);
-    float reflectiveness = R0 + ( (1 - R0) * pow(1 - cosAngle, 5) );
-    reflectiveness = clamp(1 - reflectiveness, 0, 1) + baseReflectiveness;
+    float reflectiveness = R0 + ( (1. - R0) * pow(1. - cosAngle, 5.) );
+    reflectiveness = saturate(1. - reflectiveness) + baseReflectiveness;
     return reflectiveness;
 }
 float schlickFresnel(vec3 viewDir, vec3 normal, float F0) {
-    float NormalDotView = clamp(dot(-viewDir, normal), 0, 1);
+    float NormalDotView = saturate(dot(-viewDir, normal));
     return F0 + (1.0 - F0) * pow(1.0 - NormalDotView, 5.0);
 }
 float customFresnel(vec3 viewRay, vec3 normal, float bias, float scale, float power) {
-    float reflectiveness = clamp(bias + scale * pow(1.0 + dot(viewRay, normal), power), 0, 1); 
+    float reflectiveness = saturate(bias + scale * pow(1.0 + dot(viewRay, normal), power)); 
     return reflectiveness;
 }
 
@@ -119,7 +119,7 @@ vec2 radClamp(vec2 coord) {
     // Calculate oversize vector by subtracting 1 on each axis from the absulute
     // We just need the length so sing doesnt matter
     vec2 oversize = max(vec2(0), abs(coord) - 0.5);
-    coord        /= (length(oversize) + 1);
+    coord        /= (length(oversize) + 1.);
     coord         = coord + 0.5;
     return coord;
 }
@@ -129,8 +129,8 @@ vec3 radClamp(vec3 coord) {
     // Calculate oversize vector by subtracting 1 on each axis from the absulute
     // We just need the length so sign doesnt matter
     vec3 oversize = max(vec3(0), abs(coord) - 0.5);
-    coord /= (length(oversize) + 1);
-    coord = coord + 0.5;
+    coord        /= length(oversize) + 1.;
+    coord         = coord + 0.5;
     return coord;
 }
 vec2 mirrorClamp(vec2 coord) { //Repeats coords while mirroring them (without branching)
@@ -138,7 +138,7 @@ vec2 mirrorClamp(vec2 coord) { //Repeats coords while mirroring them (without br
     // Determines whether an axis has to be flipped or not
     vec2 reversal = mod(floor(coord), vec2(2));
     vec2 add      = reversal;
-    vec2 mult     = reversal * -2 + 1;
+    vec2 mult     = reversal * -2. + 1.;
 
     coord         = fract(coord);
     // Flips the axis
@@ -150,10 +150,10 @@ vec2 mirrorClamp(vec2 coord) { //Repeats coords while mirroring them (without br
     return coord;
 }
 vec2 distortClamp(vec2 coord) {
-    coord = coord * 2 - 1;
+    coord = coord * 2. - 1.;
 
     vec2 d = abs(coord * 1.5);
-    d      = max(d-1.5, 0);
+    d      = max(d-1.5, 0.);
     coord *= exp2(-d);
  
     return coord * .5 + .5;
@@ -161,15 +161,15 @@ vec2 distortClamp(vec2 coord) {
 
 
 float smoothCutoff(float x, float cutoff, float taper) {
-    if (x > cutoff + taper) {return x;}
-    float a   = cutoff / (taper*taper*taper);
-    float tmp = (x - cutoff - taper);
-    return clamp( (a * tmp) * (tmp * tmp) + x ,0,1);
+    if (x > cutoff + taper) return x;
+    float a   = cutoff / (taper * taper * taper);
+    float tmp = x - cutoff - taper;
+    return saturate((a * tmp) * (tmp * tmp) + x);
 }
 
 float angle(vec2 v) {
     float ang = HALF_PI - atan(v.x / v.y);
-    if(v.y < 0) {ang = ang + PI;}
+    if(v.y < 0.) ang = ang + PI;
     return ang;
 }
 
