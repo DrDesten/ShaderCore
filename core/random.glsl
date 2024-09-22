@@ -127,35 +127,8 @@ float snoise(vec3 x) {
     float a = rand(i), b = rand(i+1);
     return mix(a, b, f);
 } */
-float lpnoiseRaw(vec2 x) {
-    vec2 cell = floor(x);
-    vec2 frac = fract(x);
-
-    vec2 p  = cell + frac;
-    vec2 pa = cell;
-    vec2 pb = cell + vec2(1,0);
-    vec2 pc = cell + vec2(0,1);
-    vec2 pd = cell + vec2(1,1);
-
-	vec2 a = vec2Rot(rand(pa) * TWO_PI);
-    vec2 b = vec2Rot(rand(pb) * TWO_PI);
-    vec2 c = vec2Rot(rand(pc) * TWO_PI);
-    vec2 d = vec2Rot(rand(pd) * TWO_PI);
-    return mix(
-        mix(dot(a, p-pa), dot(b, p-pb), frac.x),
-        mix(dot(c, p-pc), dot(d, p-pd), frac.x),
-        frac.y
-    );
-}
-float lpnoise(vec2 x) {
-    return lpnoiseRaw(x) * (SQRT2 / 2.) + 0.5;
-}
-float pnoiseRaw(vec2 x) {
-    vec2 cell = floor(x);
-    vec2 frac = fract(x);
-    vec2 interpolation = frac * frac * (3.0 - 2.0 * frac);
-
-    vec2 p  = cell + frac;
+float perlinRaw(vec2 x, vec2 cell, vec2 frac, vec2 interpolation) {
+    vec2 p  = x;
     vec2 pa = cell;
     vec2 pb = cell + vec2(1,0);
     vec2 pc = cell + vec2(0,1);
@@ -171,8 +144,66 @@ float pnoiseRaw(vec2 x) {
         interpolation.y
     );
 }
+float lpnoiseUnscaled(vec2 x) {
+    vec2  c = floor(x), f = fract(x);
+    float perlin = perlinRaw(x, c, f, f);
+    return perlin;
+}
+float lpnoise(vec2 x) {
+    return lpnoiseUnscaled(x) * (SQRT2 / 2.) + 0.5;
+}
+float pnoiseUnscaled(vec2 x) {
+    vec2  c = floor(x), f = fract(x);
+    vec2  i = f * f * (3.0 - 2.0 * f);
+    float perlin = perlinRaw(x, c, f, i);
+    return perlin;
+}
 float pnoise(vec2 x) {
-    return pnoiseRaw(x) * (SQRT2 / 2.) + 0.5;
+    return pnoiseUnscaled(x) * (SQRT2 / 2.) + 0.5;
+}
+
+float perlinRaw(vec3 x, vec3 cell, vec3 frac, vec3 interpolation) {
+    vec3 p  = x;
+    vec3 pa = cell;
+    vec3 pb = cell + vec3(1,0,0);
+    vec3 pc = cell + vec3(0,1,0);
+    vec3 pd = cell + vec3(1,1,0);
+    vec3 pe = cell + vec3(0,0,1);
+    vec3 pf = cell + vec3(1,0,1);
+    vec3 pg = cell + vec3(0,1,1);
+    vec3 ph = cell + vec3(1,1,1);
+
+    vec3 a = vec3Rot(rand2(pa) * TWO_PI);
+    vec3 b = vec3Rot(rand2(pb) * TWO_PI);
+    vec3 c = vec3Rot(rand2(pc) * TWO_PI);
+    vec3 d = vec3Rot(rand2(pd) * TWO_PI);
+    vec3 e = vec3Rot(rand2(pe) * TWO_PI);
+    vec3 f = vec3Rot(rand2(pf) * TWO_PI);
+    vec3 g = vec3Rot(rand2(pg) * TWO_PI);
+    vec3 h = vec3Rot(rand2(ph) * TWO_PI);
+
+    float mix1 = mix(mix(dot(a, p - pa), dot(b, p - pb), interpolation.x),
+                     mix(dot(c, p - pc), dot(d, p - pd), interpolation.x), interpolation.y);
+    float mix2 = mix(mix(dot(e, p - pe), dot(f, p - pf), interpolation.x),
+                     mix(dot(g, p - pg), dot(h, p - ph), interpolation.x), interpolation.y);
+    return mix(mix1, mix2, interpolation.z);
+}
+float lpnoiseUnscaled(vec3 x) {
+    vec3  c = floor(x), f = fract(x);
+    float perlin = perlinRaw(x, c, f, f);
+    return perlin;
+}
+float lpnoise(vec3 x) {
+    return lpnoiseUnscaled(x) * (SQRT2 / 2.) + 0.5;
+}
+float pnoiseUnscaled(vec3 x) {
+    vec3  c = floor(x), f = fract(x);
+    vec3  i = f * f * (3.0 - 2.0 * f);
+    float perlin = perlinRaw(x, c, f, i);
+    return perlin;
+}
+float pnoise(vec3 x) {
+    return pnoiseUnscaled(x) * (SQRT2 / 2.) + 0.5;
 }
 /* float pnoise(vec3 x) {
     vec3 i = floor(x);

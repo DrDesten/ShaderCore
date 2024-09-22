@@ -16,6 +16,16 @@ vec2 vec2Rot(float angle) {
     return vec2(cos(angle), sin(angle));
 }
 
+#define VEC3_ROT(angles, length) \
+    (vec3(cos(angles.x) * cos(angles.y), sin(angles.x) * cos(angles.y), sin(angles.y)) * length);
+vec3 vec3Rot(vec2 angles) {
+    float cosA = cos(angles.x);
+    float sinA = sin(angles.x);
+    float cosE = cos(angles.y);
+    float sinE = sin(angles.y);
+    return vec3(cosA * cosE, sinA * cosE, sinE);
+}
+
 mat3 rotationMatrix3DX(float angle) { // You can use mat2 instead, but flip angle and keep X. > vec3(x, mat2 * yz)
     float s = sin(angle);
     float c = cos(angle);
