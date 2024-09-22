@@ -74,46 +74,54 @@ float lnoise(vec3 x) {
 // Smoothstep Value Noise
 
 float snoise(float x) {
-    float i = floor(x);
-    float f = fract(x);
-    f = f * f * (3.0 - 2.0 * f);
+    float cell = floor(x);
+    float frac = fract(x);
+    float i    = frac * frac * (3.0 - 2.0 * frac);
 
-    float a = rand(i), b = rand(i+1.);
-    return mix(a, b, f);
+    float a = rand(cell);
+    float b = rand(cell + 1.0);
+    return mix(a, b, i);
 }
 float snoise(vec2 x) {
-    vec2 i = floor(x);
-    vec2 f = fract(x);
-    f = f * f * (3.0 - 2.0 * f);
-	float a = rand(i), b = rand(i + vec2(1,0));
-    float c = rand(i + vec2(0,1)), d = rand(i + vec2(1,1));
+    vec2 cell = floor(x);
+    vec2 frac = fract(x);
+    vec2 i    = frac * frac * (3.0 - 2.0 * frac);
+
+	float a = rand(cell);
+    float b = rand(cell + vec2(1, 0));
+    float c = rand(cell + vec2(0, 1));
+    float d = rand(cell + vec2(1, 1));
     return mix(
-        mix(a, b, f.x),
-        mix(c, d, f.x),
-        f.y
+        mix(a, b, i.x),
+        mix(c, d, i.x),
+        i.y
     );
 }
 float snoise(vec3 x) {
-    vec3 i = floor(x);
+    vec3 cell = floor(x);
     vec3 frac = fract(x);
-    frac = frac * frac * (3.0 - 2.0 * frac);
+    vec3 i    = frac * frac * (3.0 - 2.0 * frac);
 
     const vec2 s = vec2(1,0);
-	float a = rand(i + s.yyy), b = rand(i + s.xyy);
-	float c = rand(i + s.yxy), d = rand(i + s.xxy);
-	float e = rand(i + s.yyx), f = rand(i + s.xyx);
-	float g = rand(i + s.yxx), h = rand(i + s.xxx);
+	float a = rand(cell + s.yyy);
+    float b = rand(cell + s.xyy);
+	float c = rand(cell + s.yxy);
+    float d = rand(cell + s.xxy);
+	float e = rand(cell + s.yyx);
+    float f = rand(cell + s.xyx);
+	float g = rand(cell + s.yxx);
+    float h = rand(cell + s.xxx);
     return mix( 
         mix( 
-            mix(a, b, frac.x),
-            mix(c, d, frac.x),
-            frac.y 
+            mix(a, b, i.x),
+            mix(c, d, i.x),
+            i.y 
         ), mix(
-            mix(e, f, frac.x),
-            mix(g, h, frac.x),
-            frac.y 
+            mix(e, f, i.x),
+            mix(g, h, i.x),
+            i.y 
         ),
-        frac.z
+        i.z
     );
 }
 
@@ -205,29 +213,6 @@ float pnoiseUnscaled(vec3 x) {
 float pnoise(vec3 x) {
     return pnoiseUnscaled(x) * (SQRT2 / 2.) + 0.5;
 }
-/* float pnoise(vec3 x) {
-    vec3 i = floor(x);
-    vec3 frac = fract(x);
-    frac = frac * frac * (3.0 - 2.0 * frac);
-
-    const vec2 s = vec2(1,0);
-	float a = rand(i + s.yyy), b = rand(i + s.xyy);
-	float c = rand(i + s.yxy), d = rand(i + s.xxy);
-	float e = rand(i + s.yyx), f = rand(i + s.xyx);
-	float g = rand(i + s.yxx), h = rand(i + s.xxx);
-    return mix( 
-        mix( 
-            mix(a, b, frac.x),
-            mix(c, d, frac.x),
-            frac.y 
-        ), mix(
-            mix(e, f, frac.x),
-            mix(g, h, frac.x),
-            frac.y 
-        ),
-        frac.z
-    );
-} */
 
 float noise(vec2 x) {
     vec2 i = floor(x);
