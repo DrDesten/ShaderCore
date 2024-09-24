@@ -264,6 +264,26 @@ vec2 noise2(vec2 x) {
 
 // Fractal Noise
 
+#define DECLR_FRACTAL_NOISE(function_identifier, noise_function)  \
+    float function_identifier(vec2 x, int n) { \
+        float result     = 0; \
+        float amplitude  = 0.5; \
+        const vec2 shift = vec2(100); \
+ \
+        const mat2 rotscale = MAT2_ROT(0.5, 2.0); \
+ \
+        for (int i = 0; i < n; i++) { \
+            result    += amplitude * noise_function(x); \
+            x          = rotscale * x + shift; \
+            amplitude *= 0.5; \
+        } \
+ \
+        return result; \
+    }
+
+DECLR_FRACTAL_NOISE(sfbm, snoise);
+DECLR_FRACTAL_NOISE(pfbm, pnoise);
+
 float fbm(vec2 x, int n) {
 	float v = .0;
 	float a = .5;
