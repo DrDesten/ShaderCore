@@ -193,6 +193,21 @@ vec4 sqsq(vec4 x) {
     return sq(sq(x));
 }
 
+// Squared Squared Square (8th Power)
+
+float sqsqsq(float x) {
+    return sq(sq(sq(x)));
+}
+vec2 sqsqsq(vec2 x) {
+    return sq(sq(sq(x)));
+}
+vec3 sqsqsq(vec3 x) {
+    return sq(sq(sq(x)));
+}
+vec4 sqsqsq(vec4 x) {
+    return sq(sq(sq(x)));
+}
+
 // Logarithm base n
 
 float logn(float base, float x) {
