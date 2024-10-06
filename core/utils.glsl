@@ -289,6 +289,12 @@ vec4 peak05(vec4 x) {
     return x * (-4.*x + 4.); 
 }
 
+// Linear Smoothstep
+
+float linstep(float edge0, float edge1, float x) {
+    return saturate((x - edge0) * (1. / (edge1 - edge0)));
+}
+
 // Smoothstep functions with smooth 2nd derivative 
 
 float smootherstep(float x) {
