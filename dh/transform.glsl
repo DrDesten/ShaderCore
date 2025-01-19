@@ -1,7 +1,7 @@
 #ifndef CORE_DH_TRANSFORM
 #define CORE_DH_TRANSFORM
 
-#ifdef DISTANT_HORIZONS
+#if defined DISTANT_HORIZONS
 
 #include "../core/transform.glsl"
 #include "uniforms.glsl"

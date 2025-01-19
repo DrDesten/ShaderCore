@@ -1,7 +1,7 @@
 #ifndef CORE_DH_TEXTURES
 #define CORE_DH_TEXTURES
 
-#ifdef DISTANT_HORIZONS
+#if defined DISTANT_HORIZONS
 
 uniform sampler2D dhDepthTex0;
 //uniform sampler2D dhDepthTex1;

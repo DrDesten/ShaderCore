@@ -1,7 +1,7 @@
 #ifndef CORE_DH_UNIFORMS
 #define CORE_DH_UNIFORMS
 
-#ifdef DISTANT_HORIZONS
+#if defined DISTANT_HORIZONS
 
 uniform float dhNearPlane;
 uniform float dhFarPlane;
