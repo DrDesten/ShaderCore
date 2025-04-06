@@ -1,8 +1,23 @@
 #if !defined CORE_VERTEX_TRANSFORM_SIMPLE
 #define CORE_VERTEX_TRANSFORM_SIMPLE
 
+vec4 getPosition(vec4 vertex) {
+    return gl_ModelViewProjectionMatrix * vertex;
+}
+
+vec3 getView(vec4 vertex) {
+    return mat3(gl_ModelViewMatrix) * vertex.xyz + gl_ModelViewMatrix[3].xyz;
+}
+vec4 getView4(vec4 vertex) {
+    return gl_ModelViewMatrix * vertex;
+}
+
 // In Geometry Shaders, gl_* vertex attributes are not available
 #ifndef GEO
+
+vec4 getPosition() {
+    return getPosition(gl_Vertex);
+}
 
 vec3 getNormal() {
     return normalize(gl_NormalMatrix * gl_Normal);
@@ -23,10 +38,10 @@ mat3 getTBN(vec4 tangentAttribute) {
 }
 
 vec3 getView() {
-    return mat3(gl_ModelViewMatrix) * gl_Vertex.xyz + gl_ModelViewMatrix[3].xyz;
+    return getView(gl_Vertex);
 }
 vec4 getView4() {
-    return gl_ModelViewMatrix * gl_Vertex;
+    return getView4(gl_Vertex);
 }
 
 #endif
