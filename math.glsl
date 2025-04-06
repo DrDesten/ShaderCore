@@ -97,6 +97,10 @@ float schlickFresnel(vec3 viewDir, vec3 normal, float F0) {
     float NormalDotView = saturate(dot(-viewDir, normal));
     return F0 + (1.0 - F0) * pow(1.0 - NormalDotView, 5.0);
 }
+vec3 schlickFresnel(vec3 viewDir, vec3 normal, vec3 F0) {
+    float NormalDotView = saturate(dot(-viewDir, normal));
+    return F0 + (1.0 - F0) * pow(1.0 - NormalDotView, 5.0);
+}
 float customFresnel(vec3 viewRay, vec3 normal, float bias, float scale, float power) {
     float reflectiveness = saturate(bias + scale * pow(1.0 + dot(viewRay, normal), power)); 
     return reflectiveness;
