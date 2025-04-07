@@ -1,9 +1,23 @@
-
+#if ! defined CORE_DH_DISCARD
+#define CORE_DH_DISCARD
 
 #include "../core.glsl"
 #include "../transform.glsl"
 
-uniform float far;
+bool discardDHSimple(vec3 playerPos, float borderTolerance) {
+    float farSq  = sq(far);
+    float distXZ = sqmag(playerPos.xz);
+    float distY  = sq(playerPos.y);
+
+    bool distdiscardable   = distXZ - borderTolerance < farSq / 2;
+    bool heightdiscardable = distY - borderTolerance  < farSq / 2;
+
+    return distdiscardable && heightdiscardable;
+}
+
+bool discardDHSimple(vec3 playerPos) {
+    return discardDHSimple(playerPos, 0);
+}
 
 bool discardDH(vec3 worldPos, float borderTolerance) {
     vec3  borderCorrection = vec3(lessThan(cameraPosition, worldPos)) * 2 * borderTolerance - borderTolerance;
@@ -30,3 +44,5 @@ bool discardDH(vec3 worldPos, float borderTolerance) {
 bool discardDH(vec3 worldPos) {
     return discardDH(worldPos, 4./16);
 }
+
+#endif

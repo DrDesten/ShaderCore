@@ -1,6 +1,10 @@
 #if !defined CORE_TRANSFORM_2
 #define CORE_TRANSFORM_2
 
+uniform float near;
+uniform float nearInverse;
+uniform float far;
+
 uniform vec3 cameraPosition;
 uniform vec3 previousCameraPosition;
 
