@@ -38,8 +38,12 @@ float triangle(float x) {
     return saturate(1. - abs(x));
 }
 
-float sincNorm(float x) {
-    return x == 0. ? 1. : sin(x*PI) / (x*PI);
+float sinc(float x) {
+    return x == 0. ? 1. : sin(x * PI) / (x * PI);
+}
+
+float sincWindowed(float x) {
+    return sinc(x) * sinc(x * (1./TWO_PI));
 }
 
 float bell(float x) {
@@ -75,6 +79,5 @@ vec4 textureBicubic(sampler2D tex, vec2 coord, vec2 samplerSize, vec2 pixelSize)
         mix(sample1, sample0, sx)
     , sy);
 }
-
 
 #endif
