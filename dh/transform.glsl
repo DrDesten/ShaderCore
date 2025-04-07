@@ -23,6 +23,9 @@ vec4 backToClipWDH(vec3 viewpos) { // viewpos to clip pos
 vec3 backToScreenDH(vec3 viewpos) { // viewpos to screen pos
     return backToClipDH(viewpos) * 0.5 + 0.5;
 }
+vec4 backToScreenWDH(vec3 viewpos) { // viewpos to screen pos
+    return backToClipWDH(viewpos) * 0.5 + 0.5;
+}
 
 vec3 toPrevClipDH(vec3 prevviewpos) { // previous viewpos to previous screen pos
     return projectPerspectiveMAD(prevviewpos, dhPreviousProjection);

@@ -57,6 +57,10 @@ vec3 backToScreen(vec3 viewpos) { // viewpos to screen pos
     return backToClip(viewpos) * 0.5 + 0.5;
 }
 
+vec4 backToScreenW(vec3 viewpos) { // viewpos to screen pos
+    return backToClipW(viewpos) * 0.5 + 0.5;
+}
+
 
 vec3 toPrevPlayer(vec3 worldpos) { // Worldpos to previous playerfeetpos
     return worldpos - previousCameraPosition;
