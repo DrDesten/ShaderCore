@@ -9,8 +9,9 @@ bool discardDHSimple(vec3 playerPos, float borderTolerance) {
     float distXZ = sqmag(playerPos.xz);
     float distY  = sq(playerPos.y);
 
-    bool distdiscardable   = distXZ - borderTolerance < farSq / 2;
-    bool heightdiscardable = distY - borderTolerance  < farSq / 2;
+    float threshold = farSq / 3 + borderTolerance;
+    bool  distdiscardable   = distXZ < threshold;
+    bool  heightdiscardable = distY  < threshold;
 
     return distdiscardable && heightdiscardable;
 }
@@ -18,6 +19,26 @@ bool discardDHSimple(vec3 playerPos, float borderTolerance) {
 bool discardDHSimple(vec3 playerPos) {
     return discardDHSimple(playerPos, 0);
 }
+
+#ifdef FRAG
+
+bool discardDHDithered(vec3 playerPos, vec2 fragCoord, float borderTolerance) {
+    float farSq  = sq(far);
+    float distXZ = sqmag(playerPos.xz);
+    float distY  = sq(playerPos.y);
+
+    float threshold = (farSq / 3 + borderTolerance) * (Bayer4(fragCoord) * 0.5 + 0.5);
+    bool  distdiscardable   = distXZ < threshold;
+    bool  heightdiscardable = distY  < threshold;
+
+    return distdiscardable && heightdiscardable;
+}
+
+bool discardDHDithered(vec3 playerPos, vec2 fragCoord) {
+    return discardDHDithered(playerPos, fragCoord, 0);
+}
+
+#endif
 
 bool discardDH(vec3 worldPos, float borderTolerance) {
     vec3  borderCorrection = vec3(lessThan(cameraPosition, worldPos)) * 2 * borderTolerance - borderTolerance;
