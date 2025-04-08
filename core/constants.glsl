@@ -14,6 +14,8 @@ const float E       = 2.7182818284590452353602874713526624977572470937000;
 
 const float SQRT2   = 1.4142135623730951;
 
+const vec3 WHITE   = vec3(1);
+const vec3 BLACK   = vec3(0);
 const vec3 RED     = vec3(1,0,0);
 const vec3 GREEN   = vec3(0,1,0);
 const vec3 BLUE    = vec3(0,0,1);

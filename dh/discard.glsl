@@ -9,7 +9,7 @@ bool discardDHSimple(vec3 playerPos, float borderTolerance) {
     float distXZ = sqmag(playerPos.xz);
     float distY  = sq(playerPos.y);
 
-    float threshold = farSq / 3 + borderTolerance;
+    float threshold = farSq / 2 + borderTolerance;
     bool  distdiscardable   = distXZ < threshold;
     bool  heightdiscardable = distY  < threshold;
 
@@ -27,7 +27,7 @@ bool discardDHDithered(vec3 playerPos, vec2 fragCoord, float borderTolerance) {
     float distXZ = sqmag(playerPos.xz);
     float distY  = sq(playerPos.y);
 
-    float threshold = (farSq / 3 + borderTolerance) * (Bayer4(fragCoord) * 0.5 + 0.5);
+    float threshold = (farSq / 2 + borderTolerance) * (Bayer4(fragCoord) * 0.5 + 0.5);
     bool  distdiscardable   = distXZ < threshold;
     bool  heightdiscardable = distY  < threshold;
 

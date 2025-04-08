@@ -38,6 +38,20 @@ vec3 toPrevScreenDH(vec3 prevviewpos) { // previous viewpos to previous screen p
     return toPrevClipDH(prevviewpos) * 0.5 + 0.5;
 }
 
+
+vec3 reprojectTAADH(vec3 screenPos) {
+    // Project to World Space
+    vec3 pos = screenToViewDH(screenPos);
+    pos      = toPlayer(pos);
+    pos      = toWorld(pos);
+
+    // Project to previous Screen Space
+    pos      = toPrevPlayer(pos);
+    pos      = toPrevView(pos);
+    return     toPrevScreenDH(pos);
+}
+
+
 #endif
 
 #endif

@@ -42,12 +42,31 @@ float sinc(float x) {
     return x == 0. ? 1. : sin(x * PI) / (x * PI);
 }
 
-float sincWindowed(float x) {
+float lanczos(float x) {
     return sinc(x) * sinc(x * (1./TWO_PI));
+}
+
+float sincPoly(float x) {
+    float x2 = sq(x);
+    return x2 > 4 ? 0 : sinc(x) * (1 - 0.25 * x2);
 }
 
 float bell(float x) {
     return exp(-(x*x*2.));
+}
+
+float mitchell(float x) {
+    // B + 2C = 1
+    const float B = 1;
+    const float C = (1 - B) / 2;
+    x = abs(2 * x);
+    if (x > 1)
+        return ((-B - 6*C) * x*x*x + (6*B + 30*C) * x*x +
+                (-12*B - 48*C) * x + (8*B + 24*C)) * (1./6.);
+    else
+        return ((12 - 9*B - 6*C) * x*x*x + 
+                (-18 + 12*B + 6*C) * x*x +
+                (6 - 2*B)) * (1./6.);
 }
 
 vec4 textureBicubic(sampler2D tex, vec2 coord, vec2 samplerSize, vec2 pixelSize) {
