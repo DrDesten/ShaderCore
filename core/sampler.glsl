@@ -42,8 +42,14 @@ float sinc(float x) {
     return x == 0. ? 1. : sin(x * PI) / (x * PI);
 }
 
-float lanczos(float x) {
-    return sinc(x) * sinc(x * (1./TWO_PI));
+float lanczos2(float x) {
+    return sinc(x) * sinc(x * (1./2));
+}
+float lanczos3(float x) {
+    return sinc(x) * sinc(x * (1./3));
+}
+float lanczos4(float x) {
+    return sinc(x) * sinc(x * (1./4));
 }
 
 float sincPoly(float x) {
