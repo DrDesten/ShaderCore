@@ -1,9 +1,44 @@
-
+#if ! defined CORE_DH_DISCARD
+#define CORE_DH_DISCARD
 
 #include "../core.glsl"
 #include "../transform.glsl"
 
-uniform float far;
+bool discardDHSimple(vec3 playerPos, float borderTolerance) {
+    float farSq  = sq(far);
+    float distXZ = sqmag(playerPos.xz);
+    float distY  = sq(playerPos.y);
+
+    float threshold = farSq / 2 + borderTolerance;
+    bool  distdiscardable   = distXZ < threshold;
+    bool  heightdiscardable = distY  < threshold;
+
+    return distdiscardable && heightdiscardable;
+}
+
+bool discardDHSimple(vec3 playerPos) {
+    return discardDHSimple(playerPos, 0);
+}
+
+#ifdef FRAG
+
+bool discardDHDithered(vec3 playerPos, vec2 fragCoord, float borderTolerance) {
+    float farSq  = sq(far);
+    float distXZ = sqmag(playerPos.xz);
+    float distY  = sq(playerPos.y);
+
+    float threshold = (farSq / 2 + borderTolerance) * (Bayer4(fragCoord) * 0.5 + 0.5);
+    bool  distdiscardable   = distXZ < threshold;
+    bool  heightdiscardable = distY  < threshold;
+
+    return distdiscardable && heightdiscardable;
+}
+
+bool discardDHDithered(vec3 playerPos, vec2 fragCoord) {
+    return discardDHDithered(playerPos, fragCoord, 0);
+}
+
+#endif
 
 bool discardDH(vec3 worldPos, float borderTolerance) {
     vec3  borderCorrection = vec3(lessThan(cameraPosition, worldPos)) * 2 * borderTolerance - borderTolerance;
@@ -30,3 +65,5 @@ bool discardDH(vec3 worldPos, float borderTolerance) {
 bool discardDH(vec3 worldPos) {
     return discardDH(worldPos, 4./16);
 }
+
+#endif
