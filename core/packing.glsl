@@ -126,13 +126,13 @@ float vec2ToI16_f(vec2 x) {
 vec2 vec4to16x2(vec4 data) {
     ivec4 idata = ivec4(saturate(data) * 255 + 0.5);
     ivec2 encoded = ivec2(idata.x, idata.z);
-    encoded.x += idata.y << 8;
-    encoded.y += idata.w << 8;
+    encoded.x |= idata.y << 8;
+    encoded.y |= idata.w << 8;
     return vec2(encoded) * (1./65535.);
 }
 vec4 vec2x16to4(vec2 encoded) {
     ivec2 ienc  = ivec2(encoded * 65535.);
-    ivec4 idata = ivec4(ienc.x & 255, 0., ienc.y & 255, 0.);
+    ivec4 idata = ivec4(ienc.x & 255, 0, ienc.y & 255, 0);
     idata.y = ienc.x >> 8;
     idata.w = ienc.y >> 8;
     return vec4(idata) * (1./255.);
@@ -141,9 +141,9 @@ vec4 vec2x16to4(vec2 encoded) {
 uint vec4toUI(vec4 data) {
     uvec4 idata = uvec4(saturate(data) * 255. + 0.5);
     uint encoded = idata.x;
-    encoded     += idata.y << 8u;
-    encoded     += idata.z << 16u;
-    encoded     += idata.w << 24u;
+    encoded     |= idata.y << 8u;
+    encoded     |= idata.z << 16u;
+    encoded     |= idata.w << 24u;
     return encoded;
 }
 vec4 UItovec4(uint encoded) {

@@ -16,17 +16,36 @@ float rand(vec3 x){
     return fract(sin(dot(x, vec3(64.25375463, 23.27536534, 86.29678483))) * 59482.7542);
 }
 
+const float RAND_EXPAND = PHI;
+const float RAND_SHIFT  = RAND_EXPAND / 2.;
+
 vec2 rand2(float x) {
     float t = rand(x);
-    return vec2(t, rand(t * 50. - 25.));
+    return vec2(t, rand(t * RAND_EXPAND - RAND_SHIFT));
 }
 vec2 rand2(vec2 x) {
     float t = rand(x);
-    return vec2(t, rand(t * 50. - 25.));
+    return vec2(t, rand(t * RAND_EXPAND - RAND_SHIFT));
 }
 vec2 rand2(vec3 x) {
     float t = rand(x);
-    return vec2(t, rand(t * 50. - 25.));
+    return vec2(t, rand(t * RAND_EXPAND - RAND_SHIFT));
+}
+
+vec3 rand3(float x) {
+    float t = rand(x);
+    float u = rand(t * RAND_EXPAND - RAND_SHIFT);
+    return vec3(t, u, rand(u * RAND_EXPAND - RAND_SHIFT));
+}
+vec3 rand3(vec2 x) {
+    float t = rand(x);
+    float u = rand(t * RAND_EXPAND - RAND_SHIFT);
+    return vec3(t, u, rand(u * RAND_EXPAND - RAND_SHIFT));
+}
+vec3 rand3(vec3 x) {
+    float t = rand(x);
+    float u = rand(t * RAND_EXPAND - RAND_SHIFT);
+    return vec3(t, u, rand(u * RAND_EXPAND - RAND_SHIFT));
 }
 
 // Linear Value Noise
