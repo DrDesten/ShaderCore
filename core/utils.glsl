@@ -33,6 +33,26 @@ bool closeTo(float a, float b, float epsilon) {
 float fstep(float edge, float x) {
     return saturate((x - edge) * 1e36);
 }
+vec2 fstep(vec2 edge, float x) {
+    return saturate((x - edge) * 1e36);
+}
+vec3 fstep(vec3 edge, float x) {
+    return saturate((x - edge) * 1e36);
+}
+vec4 fstep(vec4 edge, float x) {
+    return saturate((x - edge) * 1e36);
+}
+
+vec2 fstep(vec2 edge, vec2 x) {
+    return saturate((x - edge) * 1e36);
+}
+vec3 fstep(vec3 edge, vec3 x) {
+    return saturate((x - edge) * 1e36);
+}
+vec4 fstep(vec4 edge, vec4 x) {
+    return saturate((x - edge) * 1e36);
+}
+
 float fstep(float edge, float x, float slope) {
     return saturate((x - edge) * slope);
 }

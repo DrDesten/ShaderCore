@@ -273,12 +273,69 @@ vec2 noise2(vec2 x) {
 
 	// Four corners in 2D of a tile
 	vec2 a = rand2(i);
-    vec2 b = rand2(i + vec2(1.0, 0.0));
-    vec2 c = rand2(i + vec2(0.0, 1.0));
-    vec2 d = rand2(i + vec2(1.0, 1.0));
+    vec2 b = rand2(i + vec2(1,0));
+    vec2 c = rand2(i + vec2(0,1));
+    vec2 d = rand2(i + vec2(1,1));
 
     vec2 u = f * f * (3.0 - 2.0 * f);
 	return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+}
+
+vec3 noise3(float x) {
+    float i = floor(x);
+    float f = fract(x);
+
+    // Two connecting points
+    vec3 a = rand3(i);
+    vec3 b = rand3(i + 1.0);
+
+    return smoothstep(a, b, vec3(f));
+}
+
+vec3 noise3(vec2 x) {
+    vec2 i = floor(x);
+    vec2 f = fract(x);
+
+	// Four corners in 2D of a tile
+	vec3 a = rand3(i);
+    vec3 b = rand3(i + vec2(1,0));
+    vec3 c = rand3(i + vec2(0,1));
+    vec3 d = rand3(i + vec2(1,1));
+
+    vec2 u = f * f * (3.0 - 2.0 * f);
+	return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+}
+
+vec3 noise3(vec3 x) {
+    vec3 i = floor(x);
+    vec3 fr = fract(x);
+    
+    // Eight corners of a cube
+    vec3 a = rand3(i);
+    vec3 b = rand3(i + vec3(1,0,0));
+    vec3 c = rand3(i + vec3(0,1,0));
+    vec3 d = rand3(i + vec3(1,1,0));
+    vec3 e = rand3(i + vec3(0,0,1));
+    vec3 f = rand3(i + vec3(1,0,1));
+    vec3 g = rand3(i + vec3(0,1,1));
+    vec3 h = rand3(i + vec3(1,1,1));
+    
+    vec3 u = fr * fr * (3.0 - 2.0 * fr);
+    
+    // Interpolate along x axis for the bottom face
+    vec3 bottom_x0 = mix(a, b, u.x);
+    vec3 bottom_x1 = mix(c, d, u.x);
+    // Interpolate along y axis for the bottom face
+    vec3 bottom = mix(bottom_x0, bottom_x1, u.y);
+    
+    // Interpolate along x axis for the top face
+    vec3 top_x0 = mix(e, f, u.x);
+    vec3 top_x1 = mix(g, h, u.x);
+    // Interpolate along y axis for the top face
+    vec3 top = mix(top_x0, top_x1, u.y);
+    
+    // Final interpolation along z axis
+    return mix(bottom, top, u.z);
 }
 
 // Fractal Noise

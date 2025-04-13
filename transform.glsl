@@ -1,6 +1,8 @@
 #if !defined CORE_TRANSFORM_2
 #define CORE_TRANSFORM_2
 
+#include "core/transform.glsl"
+
 uniform float near;
 uniform float nearInverse;
 uniform float far;

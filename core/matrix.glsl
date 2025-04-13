@@ -2,7 +2,7 @@
 #define CORE_MATRIX
 
 #define MAT2_ROT(angle, scale) \
-    (mat2(cos(angle), sin(angle), -sin(angle), cos(angle)) * scale);
+    (mat2(cos(angle), sin(angle), -sin(angle), cos(angle)) * scale)
 
 mat2 mat2Rot(float angle) {
     float ca = cos(angle), sa = sin(angle);
@@ -10,7 +10,7 @@ mat2 mat2Rot(float angle) {
 }
 
 #define VEC2_ROT(angle, length) \
-    (vec2(cos(angle), sin(angle)) * length);
+    (vec2(cos(angle), sin(angle)) * length)
 
 vec2 vec2Rot(float angle) {
     return vec2(cos(angle), sin(angle));

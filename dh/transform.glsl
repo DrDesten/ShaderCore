@@ -3,7 +3,7 @@
 
 #if defined DISTANT_HORIZONS
 
-#include "../core/transform.glsl"
+#include "../transform.glsl"
 #include "uniforms.glsl"
 
 vec3 toViewDH(vec3 clipPos) { // Clippos to viewpos
