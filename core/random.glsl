@@ -95,26 +95,25 @@ float lnoise(vec3 x) {
 float snoise(float x) {
     float cell = floor(x);
     float frac = fract(x);
-    float i    = frac * frac * (3.0 - 2.0 * frac);
 
-    float a = rand(cell);
+	// Two connecting points
+	float a = rand(cell);
     float b = rand(cell + 1.0);
-    return mix(a, b, i);
+
+	return smoothstep(a, b, frac);
 }
 float snoise(vec2 x) {
     vec2 cell = floor(x);
     vec2 frac = fract(x);
-    vec2 i    = frac * frac * (3.0 - 2.0 * frac);
 
+	// Four corners in 2D of a tile
 	float a = rand(cell);
     float b = rand(cell + vec2(1, 0));
     float c = rand(cell + vec2(0, 1));
     float d = rand(cell + vec2(1, 1));
-    return mix(
-        mix(a, b, i.x),
-        mix(c, d, i.x),
-        i.y
-    );
+
+    vec2 i = frac * frac * (3.0 - 2.0 * frac);
+	return mix(a, b, i.x) + (c - a) * i.y * (1.0 - i.x) + (d - b) * i.x * i.y;
 }
 float snoise(vec3 x) {
     vec3 cell = floor(x);
@@ -130,14 +129,116 @@ float snoise(vec3 x) {
     float f = rand(cell + s.xyx);
 	float g = rand(cell + s.yxx);
     float h = rand(cell + s.xxx);
-    return mix( 
-        mix( 
-            mix(a, b, i.x),
-            mix(c, d, i.x),
+    return mix(             // z
+        mix(                // y (low z)
+            mix(a, b, i.x), // x (low y)
+            mix(c, d, i.x), // x (high y)
             i.y 
-        ), mix(
-            mix(e, f, i.x),
-            mix(g, h, i.x),
+        ), mix(             // y (high z)
+            mix(e, f, i.x), // x (low y)
+            mix(g, h, i.x), // x (high y)
+            i.y 
+        ),
+        i.z
+    );
+}
+
+vec2 snoise2(float x) {
+    float cell = floor(x);
+    float frac = fract(x);
+
+	// Two connecting points
+	vec2 a = rand2(cell);
+    vec2 b = rand2(cell + 1.0);
+
+	return smoothstep(a, b, vec2(frac));
+}
+vec2 snoise2(vec2 x) {
+    vec2 cell = floor(x);
+    vec2 frac = fract(x);
+
+	// Four corners in 2D of a tile
+	vec2 a = rand2(cell);
+    vec2 b = rand2(cell + vec2(1, 0));
+    vec2 c = rand2(cell + vec2(0, 1));
+    vec2 d = rand2(cell + vec2(1, 1));
+
+    vec2 u = frac * frac * (3.0 - 2.0 * frac);
+	return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+}
+vec2 snoise2(vec3 x) {
+    vec3 cell = floor(x);
+    vec3 frac = fract(x);
+    vec3 i    = frac * frac * (3.0 - 2.0 * frac);
+
+    const vec2 s = vec2(1,0);
+	vec2 a = rand2(cell + s.yyy);
+    vec2 b = rand2(cell + s.xyy);
+	vec2 c = rand2(cell + s.yxy);
+    vec2 d = rand2(cell + s.xxy);
+	vec2 e = rand2(cell + s.yyx);
+    vec2 f = rand2(cell + s.xyx);
+	vec2 g = rand2(cell + s.yxx);
+    vec2 h = rand2(cell + s.xxx);
+    return mix(             // z
+        mix(                // y (low z)
+            mix(a, b, i.x), // x (low y)
+            mix(c, d, i.x), // x (high y)
+            i.y 
+        ), mix(             // y (high z)
+            mix(e, f, i.x), // x (low y)
+            mix(g, h, i.x), // x (high y)
+            i.y 
+        ),
+        i.z
+    );
+}
+
+vec3 snoise3(float x) {
+    float cell = floor(x);
+    float frac = fract(x);
+
+    // Two connecting points
+    vec3 a = rand3(cell);
+    vec3 b = rand3(cell + 1.0);
+
+    return smoothstep(a, b, vec3(frac));
+}
+vec3 snoise3(vec2 x) {
+    vec2 cell = floor(x);
+    vec2 frac = fract(x);
+
+	// Four corners in 2D of a tile
+	vec3 a = rand3(cell);
+    vec3 b = rand3(cell + vec2(1,0));
+    vec3 c = rand3(cell + vec2(0,1));
+    vec3 d = rand3(cell + vec2(1,1));
+
+    vec2 i = frac * frac * (3.0 - 2.0 * frac);
+	return mix(a, b, i.x) + (c - a) * i.y * (1.0 - i.x) + (d - b) * i.x * i.y;
+}
+vec3 snoise3(vec3 x) {
+    vec3 cell = floor(x);
+    vec3 frac = fract(x);
+    vec3 i    = frac * frac * (3.0 - 2.0 * frac);
+
+    const vec2 s = vec2(1,0);
+	vec3 a = rand3(cell + s.yyy);
+    vec3 b = rand3(cell + s.xyy);
+	vec3 c = rand3(cell + s.yxy);
+    vec3 d = rand3(cell + s.xxy);
+	vec3 e = rand3(cell + s.yyx);
+    vec3 f = rand3(cell + s.xyx);
+	vec3 g = rand3(cell + s.yxx);
+    vec3 h = rand3(cell + s.xxx);
+    return mix(             // z
+        mix(                // y (low z)
+            mix(a, b, i.x), // x (low y)
+            mix(c, d, i.x), // x (high y)
+            i.y 
+        ), mix(             // y (high z)
+            mix(e, f, i.x), // x (low y)
+            mix(g, h, i.x), // x (high y)
             i.y 
         ),
         i.z
@@ -233,111 +334,6 @@ float pnoise(vec3 x) {
     return pnoiseUnscaled(x) * (SQRT2 / 2.) + 0.5;
 }
 
-float noise(vec2 x) {
-    vec2 i = floor(x);
-    vec2 f = fract(x);
-
-	// Four corners in 2D of a tile
-	float a = rand(i);
-    float b = rand(i + vec2(1,0));
-    float c = rand(i + vec2(0,1));
-    float d = rand(i + vec2(1,1));
-
-    vec2 u = f * f * (3.0 - 2.0 * f);
-	return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-}
-float noise(float x) {
-    float i = floor(x);
-    float f = fract(x);
-
-	// Two connecting points
-	float a = rand(i);
-    float b = rand(i + 1.0);
-
-	return smoothstep(a, b, f);
-}
-
-vec2 noise2(float x) {
-    float i = floor(x);
-    float f = fract(x);
-
-	// Two connecting points
-	vec2 a = rand2(i);
-    vec2 b = rand2(i + 1.0);
-
-	return smoothstep(a, b, vec2(f));
-}
-vec2 noise2(vec2 x) {
-    vec2 i = floor(x);
-    vec2 f = fract(x);
-
-	// Four corners in 2D of a tile
-	vec2 a = rand2(i);
-    vec2 b = rand2(i + vec2(1,0));
-    vec2 c = rand2(i + vec2(0,1));
-    vec2 d = rand2(i + vec2(1,1));
-
-    vec2 u = f * f * (3.0 - 2.0 * f);
-	return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-}
-
-vec3 noise3(float x) {
-    float i = floor(x);
-    float f = fract(x);
-
-    // Two connecting points
-    vec3 a = rand3(i);
-    vec3 b = rand3(i + 1.0);
-
-    return smoothstep(a, b, vec3(f));
-}
-
-vec3 noise3(vec2 x) {
-    vec2 i = floor(x);
-    vec2 f = fract(x);
-
-	// Four corners in 2D of a tile
-	vec3 a = rand3(i);
-    vec3 b = rand3(i + vec2(1,0));
-    vec3 c = rand3(i + vec2(0,1));
-    vec3 d = rand3(i + vec2(1,1));
-
-    vec2 u = f * f * (3.0 - 2.0 * f);
-	return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-}
-
-vec3 noise3(vec3 x) {
-    vec3 i = floor(x);
-    vec3 fr = fract(x);
-    
-    // Eight corners of a cube
-    vec3 a = rand3(i);
-    vec3 b = rand3(i + vec3(1,0,0));
-    vec3 c = rand3(i + vec3(0,1,0));
-    vec3 d = rand3(i + vec3(1,1,0));
-    vec3 e = rand3(i + vec3(0,0,1));
-    vec3 f = rand3(i + vec3(1,0,1));
-    vec3 g = rand3(i + vec3(0,1,1));
-    vec3 h = rand3(i + vec3(1,1,1));
-    
-    vec3 u = fr * fr * (3.0 - 2.0 * fr);
-    
-    // Interpolate along x axis for the bottom face
-    vec3 bottom_x0 = mix(a, b, u.x);
-    vec3 bottom_x1 = mix(c, d, u.x);
-    // Interpolate along y axis for the bottom face
-    vec3 bottom = mix(bottom_x0, bottom_x1, u.y);
-    
-    // Interpolate along x axis for the top face
-    vec3 top_x0 = mix(e, f, u.x);
-    vec3 top_x1 = mix(g, h, u.x);
-    // Interpolate along y axis for the top face
-    vec3 top = mix(top_x0, top_x1, u.y);
-    
-    // Final interpolation along z axis
-    return mix(bottom, top, u.z);
-}
-
 // Fractal Noise
 
 #define DECLR_FRACTAL_NOISE(function_identifier, noise_function)  \
@@ -366,7 +362,7 @@ float fbm(vec2 x, int n) {
     const mat2 rot = mat2(cos(.5), sin(.5), -sin(.5), cos(.5));
 
 	for (int i = 0; i < n; i++) {
-		v += a * noise(x);
+		v += a * snoise(x);
 		x  = rot * x * 2.0 + shift;
 		a *= 0.5;
 	}
@@ -382,7 +378,7 @@ float fbm(vec2 x, int n, float scale, float falloff) {
     const mat2 rot = mat2(cos(.5), sin(.5), -sin(.5), cos(.5));
 
 	for (int i = 0; i < n; i++) {
-		v += a * noise(x);
+		v += a * snoise(x);
 		x  = rot * x * scale + shift;
 		a *= falloff;
 	}
@@ -398,7 +394,7 @@ float stretched_fbm(vec2 x, int n, float scale, float falloff, float stretch) {
     const mat2 rot = mat2(cos(.5), sin(.5), -sin(.5), cos(.5));
 
 	for (int i = 0; i < n; i++) {
-		v += a * noise(x * vec2(1, stretch));
+		v += a * snoise(x * vec2(1, stretch));
 		x  = rot * x * scale + shift;
 		a *= falloff;
 	}
