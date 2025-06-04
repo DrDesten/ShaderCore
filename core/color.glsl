@@ -24,7 +24,7 @@ vec3 applyBrightness(vec3 color, float brightness) { // Range: ]-1, 1[
 vec3 applyContrast(vec3 color, float contrast) { // Range: 0-inf
 	color = color * 0.99 + 0.005;
 	vec3 colorHigh = vec3(1) - 0.5 * pow(-2. * color + 2., vec3(contrast));
-	vec3 colorLow  = vec3(0.5)     * pow( 2. * color,     vec3(contrast));
+	vec3 colorLow  = vec3(0.5)     * pow( 2. * color,      vec3(contrast));
 	return saturate(mix(colorLow, colorHigh, color));
 }
 vec3 applySaturation(vec3 color, float saturation) { // Range: 0-2
