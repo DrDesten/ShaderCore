@@ -4,20 +4,20 @@
 ////////////////////////////////////////////////////////////////////////
 // Matrix Projections
 
-vec3 projectOrthographicMAD(vec3 position, mat4 projectionMatrix) {
-    return vec3(projectionMatrix[0].x, projectionMatrix[1].y, projectionMatrix[2].z) * position + projectionMatrix[3].xyz;
+vec3 projectOrthographicMAD(vec3 position, mat4 projectionMatrix_) {
+    return vec3(projectionMatrix_[0].x, projectionMatrix_[1].y, projectionMatrix_[2].z) * position + projectionMatrix_[3].xyz;
 }
-vec2 projectOrthographicMAD(vec2 position, mat4x2 projectionMatrix) {
-    return vec2(projectionMatrix[0].x, projectionMatrix[1].y) * position + projectionMatrix[3].xy;
+vec2 projectOrthographicMAD(vec2 position, mat4x2 projectionMatrix_) {
+    return vec2(projectionMatrix_[0].x, projectionMatrix_[1].y) * position + projectionMatrix_[3].xy;
 }
-vec3 projectPerspectiveMAD(vec3 position, mat4 projectionMatrix) {
-    return projectOrthographicMAD(position, projectionMatrix) / -position.z;
+vec3 projectPerspectiveMAD(vec3 position, mat4 projectionMatrix_) {
+    return projectOrthographicMAD(position, projectionMatrix_) / -position.z;
 }
-vec2 projectPerspectiveMAD(vec3 position, mat4x2 projectionMatrix) {
-    return projectOrthographicMAD(position.xy, projectionMatrix) / -position.z;
+vec2 projectPerspectiveMAD(vec3 position, mat4x2 projectionMatrix_) {
+    return projectOrthographicMAD(position.xy, projectionMatrix_) / -position.z;
 }
-vec4 projectHomogeneousMAD(vec3 position, mat4 projectionMatrix) {
-    return vec4(projectOrthographicMAD(position, projectionMatrix), -position.z);
+vec4 projectHomogeneousMAD(vec3 position, mat4 projectionMatrix_) {
+    return vec4(projectOrthographicMAD(position, projectionMatrix_), -position.z);
 }
 
 vec3 unprojectOrthographicMAD(vec2 position, mat4 inverseProjectionMatrix) {
