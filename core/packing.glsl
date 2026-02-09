@@ -15,7 +15,7 @@ vec3 spheremapDecode(vec2 v) {
     return vec3(fenc * g, 1. - f / 2.);
 }
 
-vec2 signNotZero(vec2 v) {
+vec2 signNotZero_(vec2 v) {
     return vec2(
         v.x >= 0. ? 1. : -1., 
         v.y >= 0. ? 1. : -1.
@@ -26,7 +26,7 @@ vec2 octahedralEncode(vec3 n) {
     float l1norm = abs(n.x) + abs(n.y) + abs(n.z);
     vec2  result = n.xy * (1.0 / l1norm);
     if (n.z < 0.0) {
-        result = (1.0 - abs(result.yx)) * signNotZero(result.xy);
+        result = (1.0 - abs(result.yx)) * signNotZero_(result.xy);
     }
     return result;
 }
@@ -34,7 +34,7 @@ vec2 octahedralEncode(vec3 n) {
 vec3 octahedralDecode(vec2 v) {
     vec3 n = vec3(v.x, v.y, 1.0 - abs(v.x) - abs(v.y));
     if (n.z < 0.0) {
-        n.xy = (1.0 - abs(n.yx)) * signNotZero(n.xy);
+        n.xy = (1.0 - abs(n.yx)) * signNotZero_(n.xy);
     }
     return normalize(n);
 }
