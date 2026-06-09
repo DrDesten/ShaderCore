@@ -347,4 +347,22 @@ float mapclamp(float value, float from_min, float from_max, float to_min, float 
     return clamp(map(from_min, from_max, to_min, to_max, value), to_min, to_max);
 }
 
+// Ray AABB clamping
+
+float clampAABB(vec2 minV, vec2 maxV, vec2 pos, vec2 dir) {
+    vec2  delta  = -pos + mix(minV, maxV, greaterThan(dir, vec2(0)));
+    float factor = minc(delta / dir);
+    return factor;
+}
+float clampAABB(vec3 minV, vec3 maxV, vec3 pos, vec3 dir) {
+    vec3  delta  = -pos + mix(minV, maxV, greaterThan(dir, vec3(0)));
+    float factor = minc(delta / dir);
+    return factor;
+}
+float clampAABB(vec4 minV, vec4 maxV, vec4 pos, vec4 dir) {
+    vec4  delta  = -pos + mix(minV, maxV, greaterThan(dir, vec4(0)));
+    float factor = minc(delta / dir);
+    return factor;
+}
+
 #endif
